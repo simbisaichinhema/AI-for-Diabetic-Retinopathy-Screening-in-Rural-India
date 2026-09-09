@@ -6324,3 +6324,231 @@ html, body {
 .ss-intake-shell {
   align-items: stretch !important;
 }
+
+.ss-placeholder-people {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 14px;
+  width: min(100%, 310px);
+  margin-bottom: 24px;
+}
+
+.ss-placeholder-person {
+  overflow: hidden;
+  border: 1px solid #e2e8f0;
+  border-radius: 12px;
+  background: #f8fafc;
+  box-shadow: 0 8px 20px rgba(15, 23, 42, 0.06);
+}
+
+.ss-placeholder-person img {
+  display: block;
+  width: 100%;
+  height: 132px;
+  object-fit: cover;
+  object-position: center;
+  filter: saturate(0.72) contrast(0.96);
+}
+
+.ss-placeholder-person span {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
+  padding: 8px 5px;
+  color: #64748b;
+  font-size: 9px;
+  font-weight: 800;
+  letter-spacing: 0.04em;
+}
+
+.ss-placeholder-person svg {
+  color: #ea580c;
+}
+
+.ss-info-helper-card .ss-helper-title {
+  margin-bottom: 6px !important;
+  font-size: 1.2rem !important;
+}
+
+.ss-info-helper-card .ss-helper-sub {
+  max-width: 320px;
+  margin-bottom: 0 !important;
+  font-size: 0.82rem !important;
+}
+
+/* ========================================================================
+   PREMIUM DENSITY PASS — compact controls, stronger first-viewport hierarchy
+   ======================================================================== */
+
+.acq-workstation {
+  padding: 24px 32px;
+  background:
+    radial-gradient(circle at 12% 18%, rgba(234, 88, 12, 0.07), transparent 28%),
+    #fbf9f4;
+}
+
+.acq-card-container {
+  max-width: 1120px;
+  min-height: min(520px, calc(100vh - 132px));
+  border-color: #d7dee8;
+  border-radius: 16px;
+  box-shadow: 0 24px 60px rgba(15, 23, 42, 0.1), 0 2px 8px rgba(15, 23, 42, 0.04);
+}
+
+.acq-visual-column {
+  flex-basis: 360px;
+  max-width: 360px;
+}
+
+.acq-head-wrap,
+.acq-head-img {
+  max-height: 520px;
+}
+
+.acq-controls-column {
+  padding: 28px 36px;
+  gap: 16px;
+}
+
+.acq-main-heading {
+  font-size: 22px;
+  letter-spacing: -0.02em;
+}
+
+.acq-step-badge {
+  font-size: 10px;
+  letter-spacing: 0.1em;
+}
+
+.acq-action-buttons {
+  gap: 9px;
+}
+
+.btn-acq-main-cam {
+  padding: 12px 16px;
+  border-width: 1px;
+  border-radius: 9px;
+  gap: 10px;
+}
+
+.btn-main-title {
+  font-size: 13px;
+}
+
+.btn-main-sub {
+  font-size: 10px;
+}
+
+.btn-acq-upload-file,
+.btn-acq-capture {
+  padding: 10px 14px;
+  border-radius: 8px;
+  font-size: 12px;
+}
+
+.btn-acq-replace,
+.btn-acq-next {
+  padding: 7px 10px;
+  font-size: 11px;
+}
+
+.acq-or-divider {
+  font-size: 10px;
+}
+
+/* Put the retinal image above the product name on the opening screen. */
+.ss-hero-grid {
+  flex-direction: column !important;
+  gap: 18px !important;
+  max-width: 720px !important;
+  padding: 28px 24px !important;
+}
+
+.ss-hero-graphic {
+  order: 0;
+}
+
+.ss-hero-text-block {
+  order: 1;
+  align-items: center !important;
+  text-align: center !important;
+  max-width: 640px !important;
+}
+
+.ss-fundus-frame {
+  width: 210px !important;
+  height: 210px !important;
+  box-shadow: 0 18px 42px rgba(15, 23, 42, 0.18), 0 0 0 8px rgba(255, 255, 255, 0.86) !important;
+}
+
+.ss-target-ring {
+  width: 34px !important;
+  height: 34px !important;
+  border-width: 2px !important;
+}
+
+.ss-hero-label {
+  margin-bottom: 10px !important;
+  font-size: 10px !important;
+  padding: 5px 10px !important;
+}
+
+.ss-hero-title {
+  font-size: clamp(26px, 4vw, 40px) !important;
+  line-height: 1.08 !important;
+  margin-bottom: 8px !important;
+}
+
+.ss-hero-sub {
+  font-size: 12px !important;
+  margin-bottom: 14px !important;
+}
+
+.ss-btn-hero,
+.ss-btn-begin {
+  gap: 8px !important;
+  padding: 10px 18px !important;
+  border-radius: 9px !important;
+  font-size: 13px !important;
+  box-shadow: 0 7px 18px rgba(234, 88, 12, 0.28) !important;
+}
+
+.ss-btn-hero svg,
+.ss-btn-begin svg {
+  width: 16px;
+  height: 16px;
+}
+
+@media (max-width: 760px) {
+  .acq-workstation {
+    padding: 12px;
+    overflow-y: auto;
+  }
+
+  .acq-card-container,
+  .acq-card-container.eye-mode-os,
+  .acq-card-container.eye-mode-od {
+    flex-direction: column;
+    max-height: none;
+  }
+
+  .acq-visual-column {
+    flex-basis: 250px;
+    max-width: none;
+  }
+
+  .acq-head-wrap,
+  .acq-head-img {
+    max-height: 250px;
+  }
+
+  .acq-controls-column {
+    padding: 20px;
+  }
+
+  .ss-fundus-frame {
+    width: 170px !important;
+    height: 170px !important;
+  }
+}

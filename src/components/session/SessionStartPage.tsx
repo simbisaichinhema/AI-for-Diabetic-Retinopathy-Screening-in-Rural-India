@@ -298,31 +298,20 @@ export const SessionStartPage: React.FC = () => {
                   </button>
                 </div>
               ) : (
-                /* Stage 1 Helper / Connection Card */
+                /* Stage 1 neutral profile placeholder */
                 <div className="ss-info-helper-card panel-enter">
-                  <div className="ss-helper-icon-ring">
-                    <CheckCircle size={28} className="ss-helper-icon" />
-                  </div>
-                  <h3 className="ss-helper-title">National Health Stack Active</h3>
-                  <p className="ss-helper-sub">
-                    Direct integration with NDHM & Ayushman Bharat Health Account (ABHA) portal.
-                  </p>
-
-                  <div className="ss-helper-stats">
-                    <div className="ss-hstat">
-                      <span className="hstat-v">100%</span>
-                      <span className="hstat-k">Secure Lookup</span>
+                  <div className="ss-placeholder-people" aria-hidden="true">
+                    <div className="ss-placeholder-person">
+                      <img src="/assets/head_reference_left.jpg" alt="" />
+                      <span><User size={13} /> LEFT EYE (OS)</span>
                     </div>
-                    <div className="ss-hstat-divider" />
-                    <div className="ss-hstat">
-                      <span className="hstat-v">&lt; 0.8s</span>
-                      <span className="hstat-k">Response Time</span>
+                    <div className="ss-placeholder-person">
+                      <img src="/assets/head_reference_right.jpg" alt="" />
+                      <span><User size={13} /> RIGHT EYE (OD)</span>
                     </div>
                   </div>
-
-                  <div className="ss-helper-hint">
-                    Select a <strong>Test Citizen</strong> chip or enter 12-digit Aadhaar to automatically pull medical history & ABHA credentials.
-                  </div>
+                  <h3 className="ss-helper-title">Patient profile preview</h3>
+                  <p className="ss-helper-sub">Verified patient details and bilateral eye records will appear here.</p>
                 </div>
               )}
             </div>
