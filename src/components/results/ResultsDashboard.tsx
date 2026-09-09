@@ -114,17 +114,18 @@ export const ResultsDashboard: React.FC = () => {
         <div className="export-report-btn-wrap" style={{ display: 'flex', gap: '8px' }}>
           <button
             type="button"
-            className="btn-export-report"
-            style={{ background: '#f8fafc', color: '#475569', border: '1px solid #cbd5e1' }}
+            className="btn-report-history"
             onClick={() => setIsHistoryModalOpen(true)}
+            title="View longitudinal screening history"
           >
             <History size={13} />
             <span>HISTORY</span>
           </button>
           <button
             type="button"
-            className="btn-export-report"
+            className="btn-report-export"
             onClick={() => setIsReportModalOpen(true)}
+            title="Open printable clinical report"
           >
             <Printer size={13} />
             <span>EXPORT CLINICAL REPORT</span>
