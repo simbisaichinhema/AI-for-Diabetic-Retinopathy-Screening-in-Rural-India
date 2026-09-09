@@ -38,6 +38,11 @@ export const ResultsDashboard: React.FC = () => {
   const rightEye = exam.rightEye;
   const overallGrade = exam.overallGrade;
   const overallGradeInfo = overallGrade === null ? null : DR_GRADES[overallGrade];
+  const screeningInterpretation = overallGrade === 0
+    ? 'No sufficient evidence to confirm diabetic retinopathy in the submitted images. This is a screening result, not a definitive diagnosis.'
+    : overallGrade === null
+    ? 'No valid AI screening interpretation is available yet.'
+    : `AI screening indicates ${overallGradeInfo?.shortLabel || 'a retinal finding'}. Confirm the finding with qualified clinical review before care decisions.`;
 
   const isReviewDone = exam.clinicalReview.clinicalGrade !== null || Boolean(saveStatusMsg);
 
@@ -123,7 +128,7 @@ export const ResultsDashboard: React.FC = () => {
           <section className="dashboard-panel panel-banner">
             <div className="banner-top-row">
               <div className="banner-grade-badge">
-                <span className="grade-pill-tag">AI DIAGNOSIS</span>
+                <span className="grade-pill-tag">AI SCREENING ASSESSMENT</span>
                 <span className="grade-title-text">{overallGradeInfo?.label || 'AI result unavailable'}</span>
                 <span className="grade-index-tag">GRADE {overallGrade ?? '—'} OF 4</span>
               </div>
@@ -139,14 +144,15 @@ export const ResultsDashboard: React.FC = () => {
                   ) : (
                     <span className="referral-pill refer-no">
                       <CheckCircle2 size={14} />
-                      <span>NO REFERRAL REQUIRED</span>
+                      <span>NO REFERABLE FINDING IDENTIFIED</span>
                     </span>
                   )}
                 </div>
               </div>
             </div>
 
-            <p className="banner-desc-text">{overallGradeInfo?.description || 'No valid AI classification is available for this examination.'}</p>
+            <p className="banner-desc-text">{screeningInterpretation}</p>
+            <div className="banner-review-note"><ShieldCheck size={14} /> Ophthalmologist confirmation required before clinical decisions.</div>
           </section>
 
           {/* Section 2: Bilateral Retinal Imaging with GradCAM & Enhanced Toggles */}
@@ -353,6 +359,14 @@ export const ResultsDashboard: React.FC = () => {
               <span className={`review-status-pill ${isReviewDone ? 'done' : 'pending'}`}>
                 {isReviewDone ? 'REVIEW COMPLETED' : 'PENDING REVIEW'}
               </span>
+            </div>
+
+            <div className="review-priority-note">
+              <ShieldCheck size={15} />
+              <div>
+                <strong>Human review is the final clinical step</strong>
+                <span>Confirm or amend the AI screening interpretation and record your reasoning.</span>
+              </div>
             </div>
 
             {/* Readout of AI Assessment */}
