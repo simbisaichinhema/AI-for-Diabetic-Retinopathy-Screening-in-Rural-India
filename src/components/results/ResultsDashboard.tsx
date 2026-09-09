@@ -55,6 +55,13 @@ export const ResultsDashboard: React.FC = () => {
     return eye.imageSrc || '';
   };
 
+  const getViewportLabel = (eye: typeof leftEye, mode: 'color' | 'gradcam' | 'enhanced') => {
+    if (mode === 'gradcam' && !eye.gradCamAvailable) return 'MODEL ATTENTION UNAVAILABLE';
+    if (mode === 'gradcam') return 'MODEL ATTENTION (GRAD-CAM)';
+    if (mode === 'enhanced') return 'CLAHE CONTRAST ENHANCED';
+    return 'ORIGINAL COLOR FUNDUS';
+  };
+
   return (
     <div className="minimal-results-dashboard">
       {/* Top Examination Context Bar */}
@@ -183,12 +190,8 @@ export const ResultsDashboard: React.FC = () => {
                       alt={`Left Eye ${leftEyeMode}`}
                       className="viewport-img"
                     />
-                    <span className="viewport-label">
-                      {leftEyeMode === 'gradcam'
-                        ? 'MODEL ATTENTION (GRAD-CAM)'
-                        : leftEyeMode === 'enhanced'
-                        ? 'CLAHE CONTRAST ENHANCED'
-                        : 'ORIGINAL COLOR FUNDUS'}
+                    <span className={`viewport-label ${leftEyeMode === 'gradcam' && !leftEye.gradCamAvailable ? 'viewport-label-muted' : ''}`}>
+                      {getViewportLabel(leftEye, leftEyeMode)}
                     </span>
                   </div>
                 </div>
@@ -227,12 +230,8 @@ export const ResultsDashboard: React.FC = () => {
                       alt={`Right Eye ${rightEyeMode}`}
                       className="viewport-img"
                     />
-                    <span className="viewport-label">
-                      {rightEyeMode === 'gradcam'
-                        ? 'MODEL ATTENTION (GRAD-CAM)'
-                        : rightEyeMode === 'enhanced'
-                        ? 'CLAHE CONTRAST ENHANCED'
-                        : 'ORIGINAL COLOR FUNDUS'}
+                    <span className={`viewport-label ${rightEyeMode === 'gradcam' && !rightEye.gradCamAvailable ? 'viewport-label-muted' : ''}`}>
+                      {getViewportLabel(rightEye, rightEyeMode)}
                     </span>
                   </div>
                 </div>
@@ -280,13 +279,30 @@ export const ResultsDashboard: React.FC = () => {
                 })}
               </tbody>
             </table>
+            <div className="severity-bars" aria-label="Bilateral model probability bars">
+              {([
+                { label: 'No DR', key: 'grade0' },
+                { label: 'Mild', key: 'grade1' },
+                { label: 'Moderate', key: 'grade2' },
+                { label: 'Severe', key: 'grade3' },
+                { label: 'Proliferative', key: 'grade4' },
+              ] as const).map((row) => (
+                <div className="severity-bar-row" key={row.key}>
+                  <span>{row.label}</span>
+                  <div className="severity-bar-track"><span style={{ width: `${(leftEye.probabilities?.[row.key] || 0) * 100}%` }} /></div>
+                  <b>{leftEye.probabilities ? `${(leftEye.probabilities[row.key] * 100).toFixed(0)}%` : '—'}</b>
+                  <div className="severity-bar-track"><span className="severity-bar-right" style={{ width: `${(rightEye.probabilities?.[row.key] || 0) * 100}%` }} /></div>
+                  <b>{rightEye.probabilities ? `${(rightEye.probabilities[row.key] * 100).toFixed(0)}%` : '—'}</b>
+                </div>
+              ))}
+            </div>
           </section>
 
           {/* Section 4: Retinal Evidence */}
           <section className="dashboard-panel panel-evidence">
             <div className="panel-sub-header">
               <span className="panel-title-sm">RETINAL EVIDENCE</span>
-              <span className="panel-tag-sm">Evidence source: Prototype lesion analysis</span>
+              <span className="panel-tag-sm">Evidence source: computer-vision heuristics · review required</span>
             </div>
 
             <table className="compact-evidence-table">

@@ -149,7 +149,7 @@ export const AnalysisProcessingPage: React.FC = () => {
                   <span>DEEP INFERENCE ENGINE</span>
                 </div>
                 <div className="ap-radar-tag-bottom">
-                  <span>RESNET / EFFICIENTNET-B0</span>
+                  <span>EFFICIENTNET-B0 / 5-CLASS CORAL</span>
                 </div>
               </div>
 

@@ -3597,6 +3597,11 @@ html, body {
   border: 1px solid #334155;
 }
 
+.viewport-label-muted {
+  color: #fbbf24;
+  border-color: #92400e;
+}
+
 /* DR Severity Probability Table */
 .compact-prob-table {
   width: 100%;
@@ -3634,6 +3639,51 @@ html, body {
   text-align: right;
   font-weight: 700;
   color: #2563eb;
+}
+
+.severity-bars {
+  margin-top: 14px;
+  padding-top: 12px;
+  border-top: 1px solid #e2e8f0;
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+}
+
+.severity-bar-row {
+  display: grid;
+  grid-template-columns: 76px minmax(50px, 1fr) 34px minmax(50px, 1fr) 34px;
+  align-items: center;
+  gap: 7px;
+  color: #64748b;
+  font-size: 10px;
+}
+
+.severity-bar-row b {
+  color: #334155;
+  font-family: var(--font-mono);
+  font-size: 10px;
+  text-align: right;
+}
+
+.severity-bar-track {
+  height: 7px;
+  background: #e2e8f0;
+  border-radius: 99px;
+  overflow: hidden;
+}
+
+.severity-bar-track span {
+  display: block;
+  height: 100%;
+  min-width: 2px;
+  background: linear-gradient(90deg, #60a5fa, #2563eb);
+  border-radius: inherit;
+  transition: width 0.4s ease;
+}
+
+.severity-bar-track span.severity-bar-right {
+  background: linear-gradient(90deg, #fdba74, #ea580c);
 }
 
 /* Retinal Evidence Table */

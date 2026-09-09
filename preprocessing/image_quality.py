@@ -125,6 +125,12 @@ def compute_fundus_score(image: np.ndarray) -> float:
     img = image.astype(np.float32)
     r, g, b = img[:, :, 0], img[:, :, 1], img[:, :, 2]
 
+    # Uniform or nearly black frames are not fundus photographs, regardless
+    # of channel ratios that can look superficially retinal.
+    gray = cv2.cvtColor(image, cv2.COLOR_RGB2GRAY)
+    if float(np.mean(gray)) < 20 or float(np.std(gray)) < 5:
+        return 0.0
+
     mean_r = float(np.mean(r))
     mean_g = float(np.mean(g))
     mean_b = float(np.mean(b))
@@ -149,7 +155,7 @@ def compute_fundus_score(image: np.ndarray) -> float:
 
     # Weighted combined fundus likelihood score
     score = 0.35 * score_red + 0.25 * score_rg + 0.20 * score_blue + 0.20 * red_hue_ratio
-    return float(np.clip(score, 0.45, 1.0))
+    return float(np.clip(score, 0.0, 1.0))
 
 
 def assess_image_quality(
