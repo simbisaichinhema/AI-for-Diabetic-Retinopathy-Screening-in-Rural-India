@@ -1,0 +1,186 @@
+# ==============================================================================
+# Git Ignore Configuration for SIH26038 Retinal Screening
+# (Node.js/Vite/TypeScript + Python/FastAPI/PyTorch/Keras + Docker + ML Artifacts)
+# ==============================================================================
+
+# ------------------------------------------------------------------------------
+# Dependencies & Package Managers
+# ------------------------------------------------------------------------------
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+lerna-debug.log*
+.pnp/
+.pnp.js
+
+# ------------------------------------------------------------------------------
+# Build & Distribution Artifacts
+# ------------------------------------------------------------------------------
+dist/
+dist-ssr/
+build/
+*.local
+
+# Vite cache
+.vite/
+
+# ------------------------------------------------------------------------------
+# Python & Bytecode
+# ------------------------------------------------------------------------------
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+
+# Distribution / Packaging
+develop-eggs/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+share/python-wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+MANIFEST
+
+# Virtual Environments
+venv/
+.venv/
+env/
+ENV/
+env.bak/
+venv.bak/
+
+# ------------------------------------------------------------------------------
+# Testing, Coverage & Code Analysis
+# ------------------------------------------------------------------------------
+.pytest_cache/
+.coverage
+.coverage.*
+nosetests.xml
+coverage.xml
+htmlcov/
+.tox/
+.nox/
+.hypothesis/
+.mypy_cache/
+.pytype/
+.ruff_cache/
+
+# ------------------------------------------------------------------------------
+# Machine Learning Models, Checkpoints & Large Data Files
+# ------------------------------------------------------------------------------
+# Pretrained weights and checkpoint formats
+*.h5
+*.hdf5
+*.keras
+*.pt
+*.pth
+*.ckpt
+*.onnx
+*.tflite
+*.safetensors
+*.bin
+*.weights
+checkpoints/
+
+# HuggingFace & Torch Hub Caches
+.cache/
+
+# Large Datasets & Archives
+# (Preserves dataset directory structure, metadata, and license files)
+data/aptos/
+data/drive/
+data/messidor2/
+data/processed/
+data/raw/
+data/sample/
+data/idrid/images/
+data/idrid/masks/
+data/idrid/A. Segmentation/*
+!data/idrid/A. Segmentation/LICENSE*
+!data/idrid/A. Segmentation/CC-BY*
+data/idrid/B. Disease Grading/*
+!data/idrid/B. Disease Grading/LICENSE*
+!data/idrid/B. Disease Grading/CC-BY*
+*.zip
+*.tar
+*.tar.gz
+*.tgz
+*.rar
+*.7z
+
+# Generated Reports & Logs
+reports/
+runs/
+*.log
+logs/
+
+# ------------------------------------------------------------------------------
+# MATLAB & Simulink
+# ------------------------------------------------------------------------------
+*.asv
+*.m~
+slprj/
+*.slxc
+*.autosave
+*.mex*
+
+# ------------------------------------------------------------------------------
+# Environment Variables & Secrets
+# ------------------------------------------------------------------------------
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+*.env
+kaggle.json
+secrets.json
+
+# ------------------------------------------------------------------------------
+# Operating System & IDE Files
+# ------------------------------------------------------------------------------
+# macOS
+.DS_Store
+.AppleDouble
+.LSOverride
+._*
+.Spotlight-V100
+.Trashes
+
+# Windows
+Thumbs.db
+Thumbs.db:encryptable
+ehthumbs.db
+ehthumbs_vista.db
+*.stackdump
+[Dd]esktop.ini
+$RECYCLE.BIN/
+
+# Editors & IDEs
+.idea/
+.vscode/*
+!.vscode/extensions.json
+!.vscode/settings.json
+*.sublime-workspace
+*.sublime-project
+*.swp
+*.swo
+*~
+
+# ------------------------------------------------------------------------------
+# Scratch & Temporary Folders
+# ------------------------------------------------------------------------------
+scratch/
+tmp/
+temp/
