@@ -300,15 +300,9 @@ export const SessionStartPage: React.FC = () => {
               ) : (
                 /* Stage 1 neutral profile placeholder */
                 <div className="ss-info-helper-card panel-enter">
-                  <div className="ss-placeholder-people" aria-hidden="true">
-                    <div className="ss-placeholder-person">
-                      <img src="/assets/fundus_bg.png" alt="Fundus preview" />
-                      <span><User size={13} /> OS FUNDUS PREVIEW</span>
-                    </div>
-                    <div className="ss-placeholder-person">
-                      <img src="/assets/fundus_bg.png" alt="Fundus preview" />
-                      <span><User size={13} /> OD FUNDUS PREVIEW</span>
-                    </div>
+                  <div className="ss-patient-placeholder">
+                    <img src="/assets/patient_placeholder.svg" alt="Sample patient profile" />
+                    <span><User size={13} /> SAMPLE PATIENT</span>
                   </div>
                   <h3 className="ss-helper-title">Patient profile preview</h3>
                   <p className="ss-helper-sub">Verified patient details and bilateral eye records will appear here.</p>
