@@ -82,7 +82,7 @@ export const AcquisitionPage: React.FC = () => {
     }
   };
 
-  const handleOpenCamera = async () => {
+  const handleOpenCamera = async (mode: 'fundus' | 'webcam-demo') => {
     setCameraState({ status: 'requesting' });
 
     try {
@@ -114,10 +114,19 @@ export const AcquisitionPage: React.FC = () => {
       }
 
       const fundusKeywords = ['fundus', 'retinal', 'ophthalmic', 'topcon', 'zeiss', 'canon', 'kowa', 'nidek'];
-      const preferredDevice =
-        videoDevices.find((d) =>
-          fundusKeywords.some((kw) => d.label.toLowerCase().includes(kw))
-        ) ?? videoDevices[0];
+      const fundusDevice = videoDevices.find((d) =>
+        fundusKeywords.some((kw) => d.label.toLowerCase().includes(kw))
+      );
+
+      if (mode === 'fundus' && !fundusDevice) {
+        setCameraState({
+          status: 'no_device',
+          message: 'No recognized fundus camera found. Use the separate webcam demo option only for presentation testing.',
+        });
+        return;
+      }
+
+      const preferredDevice = fundusDevice ?? videoDevices[0];
 
       const constraints: MediaStreamConstraints = {
         video: {
@@ -134,7 +143,9 @@ export const AcquisitionPage: React.FC = () => {
       setCameraState({
         status: 'live',
         stream,
-        deviceLabel: preferredDevice.label || `Camera ${videoDevices.indexOf(preferredDevice) + 1}`,
+        deviceLabel: mode === 'webcam-demo'
+          ? 'WEBCAM DEMO · NOT CLINICALLY ACCURATE'
+          : preferredDevice.label || `Fundus Camera ${videoDevices.indexOf(preferredDevice) + 1}`,
       });
 
       requestAnimationFrame(() => {
@@ -320,7 +331,7 @@ export const AcquisitionPage: React.FC = () => {
                   <button
                     type="button"
                     className="btn-acq-main-cam"
-                    onClick={handleOpenCamera}
+                    onClick={() => handleOpenCamera('fundus')}
                     disabled={cameraState.status === 'requesting'}
                   >
                     <Camera size={20} />
@@ -333,6 +344,20 @@ export const AcquisitionPage: React.FC = () => {
                       </span>
                     </div>
                   </button>
+
+                  <button
+                    type="button"
+                    className="btn-acq-webcam-demo"
+                    onClick={() => handleOpenCamera('webcam-demo')}
+                    disabled={cameraState.status === 'requesting'}
+                  >
+                    <Camera size={15} />
+                    <span>Use Webcam for Demo Only</span>
+                  </button>
+
+                  <p className="acq-demo-warning">
+                    Demo webcam capture is for presentation flow testing only and is not a clinically accurate fundus image source.
+                  </p>
 
                   <div className="acq-or-divider">
                     <span>or upload fundus file</span>

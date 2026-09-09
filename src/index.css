@@ -5369,6 +5369,36 @@ html, body {
   cursor: pointer;
   transition: all 0.15s;
 }
+
+.btn-acq-webcam-demo {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 7px;
+  width: 100%;
+  padding: 8px 12px;
+  border: 1px dashed #94a3b8;
+  border-radius: 8px;
+  background: #ffffff;
+  color: #475569;
+  font-size: 11px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.btn-acq-webcam-demo:hover:not(:disabled) {
+  border-color: #2563eb;
+  color: #1d4ed8;
+  background: #eff6ff;
+}
+
+.acq-demo-warning {
+  margin: -3px 0 0;
+  color: #92400e;
+  font-size: 10px;
+  line-height: 1.35;
+  text-align: center;
+}
 .btn-acq-upload-file:hover {
   border-color: #2563eb;
   background: #eff6ff;
@@ -6395,9 +6425,9 @@ html, body {
 /* Intake shell - ensure both columns are same height */
 .ss-intake-shell {
   align-items: stretch !important;
-  width: min(76vw, 1240px) !important;
-  min-height: min(500px, calc(100vh - 180px));
-  gap: 24px !important;
+  width: min(68vw, 1040px) !important;
+  min-height: min(420px, calc(100vh - 180px));
+  gap: 18px !important;
 }
 
 .ss-input-panel,
@@ -6408,7 +6438,7 @@ html, body {
 }
 
 .ss-input-panel {
-  padding: 38px !important;
+  padding: 28px !important;
 }
 
 .ss-profile-panel {
