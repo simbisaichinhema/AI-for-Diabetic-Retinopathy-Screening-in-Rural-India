@@ -1,0 +1,76 @@
+# SIH DR — Dataset Configuration
+# Documents every dataset used, its task, labels, and role.
+
+datasets:
+  aptos_2019:
+    name: "APTOS 2019 Blindness Detection"
+    task: "DR Severity Classification (5-class)"
+    source: "https://www.kaggle.com/c/aptos2019-blindness-detection"
+    image_count: 5590
+    resolution: "variable (typically ~3216x2136)"
+    classes: 5
+    labels: "diagnosis (0-4)"
+    class_distribution:
+      0: 1805
+      1: 370
+      2: 999
+      3: 193
+      4: 295
+    patient_ids: true
+    license: "Kaggle competition — research use permitted"
+    role: "Primary training set for DR classifier"
+    split_ratio: "train 70% / val 15% / test 15%"
+
+  idrid:
+    name: "IDRiD — Indian Diabetic Retinopathy Image Dataset"
+    task: "Lesion Detection and Segmentation"
+    source: "https://idrid.grand-challenge.org/"
+    image_count: 516
+    resolution: "4288x2848"
+    labels_available:
+      - "DR grade (0-4)"
+      - "DME grade"
+      - "Microaneurysm segmentation masks"
+      - "Hemorrhage segmentation masks"
+      - "Hard exudate segmentation masks"
+      - "Soft exudate segmentation masks"
+      - "Optic disc segmentation mask"
+    patient_ids: true
+    license: "Research use — cite original paper"
+    role: "Lesion detection/segmentation training"
+    notes: "Use only lesion annotation images for lesion pipeline"
+
+  drive:
+    name: "DRIVE — Digital Retinal Images for Vessel Extraction"
+    task: "Retinal Vessel Segmentation"
+    source: "https://drive.grand-challenge.org/"
+    image_count: 40
+    resolution: "565x584"
+    labels_available:
+      - "Vessel segmentation masks (1st and 2nd observer)"
+    patient_ids: true
+    license: "Research use permitted"
+    role: "Vessel segmentation training"
+    notes: "Small dataset; use with data augmentation"
+
+  messidor2:
+    name: "Messidor-2"
+    task: "External validation"
+    source: "http://www.adris.net/messidor2"
+    image_count: 1748
+    resolution: "1440x960 or 2240x1488"
+    labels_available:
+      - "DR retinopathy grade (R0-R3)"
+      - "Risk of macular edema (0-2)"
+    patient_ids: true
+    license: "Research use — registration required"
+    role: "External validation (DO NOT tune on this)"
+    notes: "Verify labels match before using"
+
+# Dataset matrix summary:
+# | Dataset   | Task                  | Images | Labels              | Role              |
+# |-----------|-----------------------|--------|---------------------|-------------------|
+# | APTOS     | DR classification     | 5590   | 5-class DR grade    | Primary training  |
+# | IDRiD     | Lesion segmentation   | 516    | Lesion masks + DR   | Lesion pipeline   |
+# | DRIVE     | Vessel segmentation   | 40     | Vessel masks        | Vessel pipeline   |
+# | Messidor-2| External validation   | 1748   | DR grade + DME      | Generalization    |

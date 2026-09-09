@@ -1,0 +1,78 @@
+# SIH DR — Main Configuration
+project:
+  name: "Explainable AI for Diabetic Retinopathy Screening"
+  team: "INFINITE LOOPS"
+  version: "1.0.0"
+  seed: 42
+
+# Paths
+paths:
+  data_root: "data"
+  aptos_dir: "data/aptos"
+  idrid_dir: "data/idrid"
+  drive_dir: "data/drive"
+  messidor2_dir: "data/messidor2"
+  models_dir: "models"
+  reports_dir: "reports"
+
+# Image settings
+image:
+  size: [512, 512]  # Upgraded from 224 to match competitor's B3 input
+  channels: 3
+  dtype: "float32"
+
+# Training
+training:
+  batch_size: 8  # Reduced for 512x512 input to fit GPU memory
+  epochs: 100
+  learning_rate: 0.0003  # LR warmup (3e-4 from competitor)
+  min_lr: 0.000001
+  patience: 4
+  fine_tune_epochs: 10
+  fine_tune_lr: 0.00002  # LR fine-tune (2e-5 from competitor)
+  validation_split: 0.15
+  test_split: 0.15
+  weight_decay: 0.00001  # AdamW weight decay
+
+# CORAL ordinal regression settings
+coral:
+  enabled: true
+  input_size: [512, 512]
+  backbone: "EfficientNetB3"
+  dropout: 0.4
+  warmup_epochs: 2
+  finetune_epochs: 10
+  unfreeze_last_n: 40
+  # Power-law oversampling
+  oversample_power: 0.55
+  class1_boost: 1.25
+  class4_boost: 1.15
+  # Cutoff search
+  cutoff_iters: 4500
+  cutoff_min_gap: 0.25
+  cutoff_grid_range: [0.20, 3.81]
+  cutoff_grid_step: 0.05
+  # Distribution constraints (from APTOS validation)
+  p1_range: [0.05, 0.15]
+  p3_range: [0.03, 0.09]
+  p4_range: [0.05, 0.10]
+
+# DR Grades
+dr_grades:
+  0: "No DR"
+  1: "Mild DR"
+  2: "Moderate DR"
+  3: "Severe DR"
+  4: "Proliferative DR"
+
+# Referable DR threshold (project definition)
+referable_dr:
+  threshold: 2  # Level 2+ is referable
+  definition: "Level 2 or higher DR severity"
+
+# Quality gate thresholds
+quality:
+  min_focus: 0.5
+  min_illumination: 0.4
+  min_fov: 0.5
+  min_overall: 0.5
