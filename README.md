@@ -342,8 +342,8 @@ Run the full production-ready workstation inside a containerized environment:
 
 ```bash
 # Clone the repository
-git clone https://github.com/your-username/SIH26038.git
-cd SIH26038
+git clone https://github.com/simbisaichinhema/AI-for-Diabetic-Retinopathy-Screening-in-Rural-India.git
+cd AI-for-Diabetic-Retinopathy-Screening-in-Rural-India
 
 # Build and start the container
 docker-compose up --build
