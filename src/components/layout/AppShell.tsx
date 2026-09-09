@@ -21,7 +21,6 @@ export const AppShell: React.FC = () => {
   const [isSidebarCollapsed, setIsSidebarCollapsed] = useState<boolean>(false);
 
   const isSessionStart = currentStep === 'session_start';
-  const isResultsStep  = currentStep === 'clinical_results';
 
   const renderActiveStep = () => {
     switch (currentStep) {
@@ -49,13 +48,10 @@ export const AppShell: React.FC = () => {
 
   return (
     <div className="clinical-app-shell">
-      {/* Sidebar is ONLY displayed on the Results Dashboard and is collapsible */}
-      {isResultsStep && (
-        <Sidebar
-          isCollapsed={isSidebarCollapsed}
-          onToggleCollapse={() => setIsSidebarCollapsed((prev) => !prev)}
-        />
-      )}
+      <Sidebar
+        isCollapsed={isSidebarCollapsed}
+        onToggleCollapse={() => setIsSidebarCollapsed((prev) => !prev)}
+      />
 
       {/* Main Clinical Station Workspace */}
       <div className="clinical-main-content">
@@ -63,7 +59,7 @@ export const AppShell: React.FC = () => {
         <WorkflowTracker />
 
         {/* Dynamic Page Container */}
-        <main className={`clinical-page-container ${!isResultsStep ? 'workflow-fullwidth' : ''}`}>
+        <main className={`clinical-page-container ${currentStep !== 'clinical_results' ? 'workflow-fullwidth' : ''}`}>
           {renderActiveStep()}
         </main>
       </div>

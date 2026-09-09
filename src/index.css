@@ -312,17 +312,28 @@ html, body {
   text-decoration: none;
   transition: all 0.15s ease;
   border: 1px solid transparent;
+  appearance: none;
 }
 
 .sidebar-nav-item:hover {
   background-color: var(--bg-sidebar-hover);
   color: #ffffff;
+  transform: translateX(2px);
 }
 
 .sidebar-nav-item.active {
   background-color: var(--bg-sidebar-active);
   color: #38bdf8;
   border-color: rgba(56, 189, 248, 0.2);
+}
+
+.clinical-sidebar.collapsed .sidebar-nav-item:hover {
+  transform: translateY(-1px);
+}
+
+.clinical-sidebar button:focus-visible {
+  outline: 2px solid #38bdf8;
+  outline-offset: 2px;
 }
 
 .sidebar-footer {

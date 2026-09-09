@@ -7,11 +7,8 @@ import React from 'react';
 import {
   LayoutDashboard,
   PlusCircle,
-  Users,
   FileCheck,
   FileText,
-  BarChart3,
-  Settings,
   LogOut,
   Eye,
   PanelLeftClose,
@@ -28,13 +25,10 @@ export const Sidebar: React.FC<SidebarProps> = ({ isCollapsed, onToggleCollapse 
   const { currentStep, startNewScreening, navigateToStep } = useScreening();
 
   const navItems = [
-    { id: 'dashboard', label: 'Dashboard', icon: LayoutDashboard, onClick: () => navigateToStep('clinical_results') },
-    { id: 'new_screening', label: 'New Screening', icon: PlusCircle, active: currentStep === 'acquisition', onClick: startNewScreening },
-    { id: 'patients', label: 'Patients', icon: Users },
+    { id: 'dashboard', label: 'Dashboard', icon: LayoutDashboard, active: currentStep === 'clinical_results', onClick: () => navigateToStep('clinical_results') },
+    { id: 'new_screening', label: 'New Screening', icon: PlusCircle, active: currentStep === 'session_start' || currentStep === 'acquisition', onClick: startNewScreening },
     { id: 'results', label: 'Results', icon: FileCheck, active: currentStep === 'clinical_results', onClick: () => navigateToStep('clinical_results') },
-    { id: 'reports', label: 'Reports', icon: FileText },
-    { id: 'analytics', label: 'Analytics', icon: BarChart3 },
-    { id: 'settings', label: 'Settings', icon: Settings },
+    { id: 'reports', label: 'Report Workspace', icon: FileText, active: currentStep === 'clinical_results', onClick: () => navigateToStep('clinical_results') },
   ];
 
   return (
