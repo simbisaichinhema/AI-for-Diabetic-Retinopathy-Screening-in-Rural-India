@@ -158,28 +158,28 @@ export const ScreeningProvider: React.FC<{ children: ReactNode }> = ({ children 
     setQualityProgress(5);
     setQualityStageMessage('Left Eye (OS): Initializing optical sharpness & focus scan...');
 
-    // 5-second scanning stage milestones
-    const delay = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
-
-    await delay(700);
-    setQualityProgress(20);
-    setQualityStageMessage('Left Eye (OS): Scanning vascular boundaries & Laplacian focus...');
-
-    await delay(800);
-    setQualityProgress(40);
-    setQualityStageMessage('Left Eye (OS): Analyzing illumination uniformity & macula FOV...');
-
-    await delay(800);
-    setQualityProgress(55);
-    setQualityStageMessage('Right Eye (OD): Initializing optical sharpness & focus scan...');
-
-    await delay(800);
-    setQualityProgress(75);
-    setQualityStageMessage('Right Eye (OD): Scanning vascular boundaries & Laplacian focus...');
-
-    await delay(900);
-    setQualityProgress(92);
-    setQualityStageMessage('Synthesizing bilateral diagnostic quality scores...');
+    const duplicateCapture = exam.leftEye.imageSrc === exam.rightEye.imageSrc;
+    if (duplicateCapture) {
+      const duplicateReason = 'The same image was selected for both eyes. Capture separate OS and OD fundus images.';
+      const rejectedQuality: ImageQualityMetrics = {
+        focus: { status: 'Insufficient', details: duplicateReason },
+        illumination: { status: 'Insufficient', details: duplicateReason },
+        fieldOfView: { status: 'Insufficient', details: duplicateReason },
+        fundusValidity: { isValid: false, details: duplicateReason },
+        overallStatus: 'REJECTED',
+        failureReasons: [duplicateReason],
+      };
+      setQualityProgress(100);
+      setQualityStageMessage(duplicateReason);
+      setExam((prev) => ({
+        ...prev,
+        leftEye: { ...prev.leftEye, quality: rejectedQuality },
+        rightEye: { ...prev.rightEye, quality: rejectedQuality },
+      }));
+      await new Promise((resolve) => setTimeout(resolve, 250));
+      navigateToStep('quality_results');
+      return;
+    }
 
     // Get real metrics with a timeout so we never hang at 92%
     const withTimeout = <T,>(promise: Promise<T>, ms: number): Promise<T | null> =>
@@ -190,12 +190,16 @@ export const ScreeningProvider: React.FC<{ children: ReactNode }> = ({ children 
 
     let leftMetrics = exam.leftEye.quality;
     if (exam.leftEye.imageSrc) {
+      setQualityProgress(20);
+      setQualityStageMessage('Left Eye (OS): Assessing focus, illumination, field of view and fundus validity...');
       const result = await withTimeout(apiService.assessQuality(exam.leftEye), 30000);
       if (result) leftMetrics = result;
     }
 
     let rightMetrics = exam.rightEye.quality;
     if (exam.rightEye.imageSrc) {
+      setQualityProgress(60);
+      setQualityStageMessage('Right Eye (OD): Assessing focus, illumination, field of view and fundus validity...');
       const result = await withTimeout(apiService.assessQuality(exam.rightEye), 30000);
       if (result) rightMetrics = result;
     }
@@ -212,9 +216,15 @@ export const ScreeningProvider: React.FC<{ children: ReactNode }> = ({ children 
     const finalLeftQuality = leftMetrics || rejectedQuality('No quality result received from the screening backend.');
     const finalRightQuality = rightMetrics || rejectedQuality('No quality result received from the screening backend.');
 
-    await delay(600);
+    setQualityProgress(92);
+    setQualityStageMessage('Comparing bilateral quality results...');
+    await new Promise((resolve) => setTimeout(resolve, 300));
     setQualityProgress(100);
-    setQualityStageMessage('Bilateral quality gate passed · Ready for AI inference');
+    setQualityStageMessage(
+      finalLeftQuality.overallStatus === 'ACCEPTED' && finalRightQuality.overallStatus === 'ACCEPTED'
+        ? 'Bilateral quality gate passed · Ready for AI inference'
+        : 'Quality review complete · Recapture required for failed scans'
+    );
 
     setExam((prev) => ({
       ...prev,
@@ -222,7 +232,7 @@ export const ScreeningProvider: React.FC<{ children: ReactNode }> = ({ children 
       rightEye: { ...prev.rightEye, quality: finalRightQuality },
     }));
 
-    await delay(400);
+    await new Promise((resolve) => setTimeout(resolve, 250));
     navigateToStep('quality_results');
   };
 

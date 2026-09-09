@@ -4,7 +4,7 @@
  * Clean, distraction-free bilateral quality report matching the session & acquisition workflow.
  */
 
-import React from 'react';
+import React, { useEffect, useRef } from 'react';
 import {
   CheckCircle2,
   XCircle,
@@ -24,6 +24,15 @@ export const QualityResultsPage: React.FC = () => {
 
   const isLeftAccepted = leftQuality?.overallStatus === 'ACCEPTED';
   const isRightAccepted = rightQuality?.overallStatus === 'ACCEPTED';
+  const autoStarted = useRef(false);
+
+  useEffect(() => {
+    if (isLeftAccepted && isRightAccepted && !autoStarted.current) {
+      autoStarted.current = true;
+      const timer = window.setTimeout(() => runRetinalAnalysis(), 900);
+      return () => window.clearTimeout(timer);
+    }
+  }, [isLeftAccepted, isRightAccepted, runRetinalAnalysis]);
 
   const renderEyeCard = (eye: EyeData, isAccepted: boolean) => {
     const q = eye.quality;
@@ -142,7 +151,7 @@ export const QualityResultsPage: React.FC = () => {
               onClick={runRetinalAnalysis}
               disabled={!isLeftAccepted || !isRightAccepted}
             >
-              <span>Proceed to AI Retinal Analysis</span>
+              <span>{isLeftAccepted && isRightAccepted ? 'Opening AI Results...' : 'Proceed to AI Retinal Analysis'}</span>
               <ArrowRight size={16} />
             </button>
           </div>

@@ -6377,6 +6377,109 @@ html, body {
   color: #ea580c;
 }
 
+/* Quality and screening workspaces use the full clinical canvas on desktop. */
+.qp-workstation,
+.qr-workstation {
+  padding: 24px 32px;
+}
+
+.qp-card-container,
+.qr-card-container {
+  width: min(76vw, 1240px);
+  max-width: none;
+  padding: 30px 34px;
+  border-radius: 16px;
+  box-shadow: 0 24px 60px rgba(15, 23, 42, 0.1), 0 2px 8px rgba(15, 23, 42, 0.04);
+}
+
+.qp-body-grid {
+  grid-template-columns: 1.35fr 1fr;
+  gap: 28px;
+}
+
+.qp-eyes-row,
+.qr-body-grid {
+  gap: 18px;
+}
+
+.qp-eye-frame {
+  height: 190px;
+}
+
+.qr-eye-frame {
+  height: 230px;
+}
+
+.qp-main-title,
+.qr-main-title {
+  font-size: 23px;
+}
+
+.qp-main-subtitle,
+.qr-main-subtitle {
+  font-size: 13px;
+}
+
+.qp-progress-track {
+  height: 10px;
+}
+
+@media (max-width: 900px) {
+  .qp-workstation,
+  .qr-workstation {
+    padding: 14px 12px;
+  }
+
+  .qp-card-container,
+  .qr-card-container {
+    width: 100%;
+    padding: 20px 16px;
+  }
+
+  .qp-header-strip,
+  .qr-header-strip,
+  .qr-action-bar {
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  .qp-body-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .qp-eye-frame,
+  .qr-eye-frame {
+    height: 200px;
+  }
+
+  .qp-stage-msg {
+    font-size: 11px;
+  }
+}
+
+@media (max-width: 560px) {
+  .qp-eyes-row,
+  .qr-body-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .qp-eye-frame,
+  .qr-eye-frame {
+    height: 180px;
+  }
+
+  .qp-patient-chip,
+  .qr-gate-status-badge {
+    width: 100%;
+    justify-content: center;
+  }
+
+  .qr-btn-primary {
+    width: 100%;
+    justify-content: center;
+  }
+}
+
 .ss-info-helper-card .ss-helper-title {
   margin-bottom: 6px !important;
   font-size: 1.2rem !important;

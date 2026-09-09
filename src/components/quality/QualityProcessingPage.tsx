@@ -17,25 +17,25 @@ export const QualityProcessingPage: React.FC = () => {
     {
       id: 'focus',
       title: 'Vascular Edge Sharpness',
-      desc: 'Laplacian focus score ≥ 100.0 for retinal microvasculature.',
+      desc: 'Measures retinal edge sharpness and image focus.',
       threshold: 25,
     },
     {
       id: 'illumination',
       title: 'Illumination Uniformity',
-      desc: 'Exposure verification across macula and optic nerve head.',
+      desc: 'Checks exposure balance across the retinal field.',
       threshold: 50,
     },
     {
       id: 'fov',
       title: 'Field of View & Centering',
-      desc: '45° diagnostic field centering with adequate anatomical coverage.',
+      desc: 'Checks retinal field coverage and image centering.',
       threshold: 75,
     },
     {
       id: 'integrity',
       title: 'Diagnostic Data Integrity',
-      desc: 'Zero artifact or compression distortion confirmed.',
+      desc: 'Confirms the image is suitable for model analysis.',
       threshold: 100,
     },
   ];
