@@ -162,6 +162,10 @@ export const SessionStartPage: React.FC = () => {
 
         {/* ═══ STAGE 0 — HERO (Side-by-side Layout) ═══ */}
         <div className={`ss-stage ss-stage-idle ${stage === 'idle' ? 'stage-active' : 'stage-exit'}`}>
+          <div className="ss-hero-eye-background" aria-hidden="true">
+            <img src="/assets/head_reference_left.jpg" alt="" />
+            <img src="/assets/head_reference_right.jpg" alt="" />
+          </div>
           <div className="ss-hero-grid">
             
             {/* Left Column: Circular Fundus Graphic with Target Marker */}
@@ -180,6 +184,7 @@ export const SessionStartPage: React.FC = () => {
 
             {/* Right Column: Title & Action CTA */}
             <div className="ss-hero-text-block">
+              <img src="/assets/sih_logo_bar.jpg" alt="Smart India Hackathon" className="ss-hero-brand-logo" />
               <div className="ss-hero-label">
                 <span className="ss-pulse-dot" />
                 AI-Powered Retinal Screening · NHM India
@@ -193,6 +198,11 @@ export const SessionStartPage: React.FC = () => {
               <p className="ss-hero-sub">
                 Smart India Hackathon 2026 · Problem SIH26038
               </p>
+
+              <div className="ss-learning-note">
+                <span className="ss-learning-dot" />
+                HUMAN-VALIDATED MODEL IMPROVEMENT LOOP
+              </div>
 
               <button
                 id="btn-start-session"
