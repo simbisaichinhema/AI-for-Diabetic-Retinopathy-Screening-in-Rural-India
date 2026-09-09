@@ -65,8 +65,6 @@ export const AnalysisProcessingPage: React.FC = () => {
     return 'text-emerald-600';
   };
 
-  const sampleScanSrc = exam.leftEye.imageSrc || exam.rightEye.imageSrc;
-
   return (
     <div className="ap-workstation">
       <div className="ap-card-container">
@@ -116,37 +114,27 @@ export const AnalysisProcessingPage: React.FC = () => {
 
         {/* Body Grid: Central Eye Radar Scan (Left) & Screening Pipeline Stages (Right) */}
         <div className="ap-body-grid">
-          {/* Left: Central Retinal Radar Scan */}
+          {/* Left: Animated convolutional network preview */}
           <div className="ap-radar-col">
             <div className="ap-col-label">
               <Eye size={14} className="text-slate-600" />
-              <span>OPTICAL RADAR SCANNER</span>
+              <span>CONVOLUTIONAL FEATURE ENGINE</span>
             </div>
 
             <div className="ap-radar-card">
               <div className="ap-radar-viewport">
-                {sampleScanSrc ? (
-                  <img src={sampleScanSrc} alt="Retinal Radar Scan" className="ap-radar-fundus-img" />
-                ) : (
-                  <div className="ap-radar-fallback">
-                    <Eye size={40} className="text-slate-400" />
-                  </div>
-                )}
-
-                {/* Animated Rotating Radar Sweep Beam */}
-                <div className="ap-radar-sweep-beam" />
-
-                {/* Radar Concentric Rings */}
-                <div className="ap-radar-ring ring-1" />
-                <div className="ap-radar-ring ring-2" />
-                <div className="ap-radar-ring ring-3" />
-                <div className="ap-radar-crosshair-h" />
-                <div className="ap-radar-crosshair-v" />
+                <div className="ap-neural-network" aria-label="Animated neural network processing preview">
+                  <div className="ap-neural-layer"><i /><i /><i /><i /><i /></div>
+                  <div className="ap-neural-layer"><i /><i /><i /><i /><i /><i /></div>
+                  <div className="ap-neural-layer"><i /><i /><i /><i /><i /></div>
+                  <div className="ap-neural-layer"><i /><i /><i /></div>
+                  <span className="ap-neural-pulse" />
+                </div>
 
                 {/* HUD Overlay Tags */}
                 <div className="ap-radar-tag-top">
                   <Activity size={10} className="animate-pulse text-emerald" />
-                  <span>DEEP INFERENCE ENGINE</span>
+                  <span>LIVE FEATURE ACTIVATION</span>
                 </div>
                 <div className="ap-radar-tag-bottom">
                   <span>EFFICIENTNET-B0 / 5-CLASS CORAL</span>

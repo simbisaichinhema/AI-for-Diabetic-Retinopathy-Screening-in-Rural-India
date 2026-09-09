@@ -2755,6 +2755,85 @@ html, body {
   justify-content: center;
 }
 
+.ap-neural-network {
+  position: relative;
+  width: 92%;
+  height: 88%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 16px;
+  background:
+    radial-gradient(circle at 50% 50%, rgba(37, 99, 235, 0.18), transparent 58%),
+    #070b14;
+  overflow: hidden;
+}
+
+.ap-neural-layer {
+  position: relative;
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+  height: 100%;
+  min-width: 18px;
+}
+
+.ap-neural-layer:not(:last-of-type)::after {
+  content: '';
+  position: absolute;
+  z-index: -1;
+  top: 50%;
+  left: 9px;
+  width: 105px;
+  height: 1px;
+  background: linear-gradient(90deg, rgba(56, 189, 248, 0.12), rgba(16, 185, 129, 0.55), rgba(56, 189, 248, 0.12));
+  box-shadow: 0 0 8px rgba(16, 185, 129, 0.35);
+}
+
+.ap-neural-layer i {
+  display: block;
+  width: 13px;
+  height: 13px;
+  border: 2px solid #38bdf8;
+  border-radius: 50%;
+  background: #0f172a;
+  box-shadow: 0 0 8px rgba(56, 189, 248, 0.8), inset 0 0 5px rgba(16, 185, 129, 0.6);
+  animation: apNeuronPulse 1.8s ease-in-out infinite;
+}
+
+.ap-neural-layer:nth-child(2) i { border-color: #a78bfa; animation-delay: 0.28s; }
+.ap-neural-layer:nth-child(3) i { border-color: #34d399; animation-delay: 0.56s; }
+.ap-neural-layer:nth-child(4) i { border-color: #fbbf24; animation-delay: 0.84s; }
+
+.ap-neural-layer i:nth-child(2) { animation-delay: 0.2s; }
+.ap-neural-layer i:nth-child(3) { animation-delay: 0.4s; }
+.ap-neural-layer i:nth-child(4) { animation-delay: 0.6s; }
+.ap-neural-layer i:nth-child(5) { animation-delay: 0.8s; }
+.ap-neural-layer i:nth-child(6) { animation-delay: 1s; }
+
+@keyframes apNeuronPulse {
+  0%, 100% { transform: scale(0.82); opacity: 0.55; }
+  50% { transform: scale(1.18); opacity: 1; }
+}
+
+.ap-neural-pulse {
+  position: absolute;
+  top: 12%;
+  left: 8%;
+  width: 3px;
+  height: 76%;
+  background: linear-gradient(180deg, transparent, #f8fafc, transparent);
+  box-shadow: 0 0 16px 4px rgba(56, 189, 248, 0.7);
+  opacity: 0.9;
+  animation: apNetworkSweep 2.4s linear infinite;
+}
+
+@keyframes apNetworkSweep {
+  from { transform: translateX(0); }
+  to { transform: translateX(455px); }
+}
+
 /* Rotating Radar Beam Animation */
 .ap-radar-sweep-beam {
   position: absolute;
