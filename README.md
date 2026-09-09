@@ -2,7 +2,7 @@
 title: INFINITE LOOPS - SIH26038 Retinal Screening
 emoji: 👁️
 colorFrom: blue
-colorTo: slate
+colorTo: blue
 sdk: docker
 app_port: 7860
 pinned: false
