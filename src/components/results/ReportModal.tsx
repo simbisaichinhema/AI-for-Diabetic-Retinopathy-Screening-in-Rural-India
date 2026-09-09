@@ -32,8 +32,8 @@ export const ReportModal: React.FC = () => {
     document.body.removeChild(link);
   };
 
-  const overallGrade = exam.overallGrade ?? 0;
-  const overallInfo = DR_GRADES[overallGrade];
+  const overallGrade = exam.overallGrade;
+  const overallInfo = overallGrade === null ? null : DR_GRADES[overallGrade];
 
   const leftEye = exam.leftEye;
   const rightEye = exam.rightEye;
@@ -138,7 +138,7 @@ export const ReportModal: React.FC = () => {
               <div className="result-main-col">
                 <div className="res-lbl">OVERALL AI SCREENING GRADE</div>
                 <div className="res-grade-title">
-                  Grade {overallGrade} — {overallInfo.label}
+                  {overallInfo ? `Grade ${overallGrade} — ${overallInfo.label}` : 'AI result unavailable'}
                 </div>
                 <div className="res-meta-line">
                   Model Confidence: <strong>{exam.overallConfidence !== null ? `${(exam.overallConfidence * 100).toFixed(1)}%` : '—'}</strong>

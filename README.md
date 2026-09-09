@@ -306,7 +306,7 @@ SIH26038/
 │   │   ├── results/         # Clinician review dashboard, Grad-CAM viewer
 │   │   └── session/         # Patient registration and session start
 │   ├── context/             # Screening state management (React Context)
-│   ├── services/            # API clients and clinical default mocks
+│   ├── services/            # API clients and empty clinical state
 │   └── types/               # TypeScript clinical data definitions
 │
 ├── tests/                   # Python automated unit and regression tests
@@ -393,7 +393,7 @@ npm run dev
 Open **`http://localhost:5173`** in your browser.
 
 > [!TIP]
-> If the backend is not running or model weights are downloading, the frontend will automatically enter **Demo Mode**, enabling full UI inspection with synthetic clinical cases and sample fundus photographs.
+> The frontend does not generate synthetic clinical results. If the backend or model is unavailable, screening stops and the UI reports that no valid analysis is available.
 
 ---
 

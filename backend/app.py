@@ -54,11 +54,9 @@ def _init_pipeline_sync():
     try:
         from inference.pipeline import DRScreeningPipeline
         pipeline = DRScreeningPipeline()
-        if getattr(pipeline.classifier, "_fallback", False):
-            pipeline_error = getattr(pipeline.classifier, "_load_error", "model fallback mode")
-            print(f"Model warmup: fallback mode ({pipeline_error[:200]})")
-        else:
-            print("Model warmup complete.")
+        if pipeline.classifier.model is None:
+            raise RuntimeError("Hugging Face classifier did not load")
+        print("Model warmup complete.")
     except Exception as e:
         pipeline_error = str(e)
         print(f"Model warmup failed: {e}")
@@ -157,7 +155,7 @@ async def screen_image_stream(file: UploadFile = File(...)):
     # Tell UI we are loading the AI model (first run can take 20-60s).
     def generate():
         try:
-            if pipe.classifier.model is None and not getattr(pipe.classifier, "_fallback", False):
+            if pipe.classifier.model is None:
                 yield f"data: {json.dumps({'type': 'stage', 'name': 'model_loading', 'message': 'Loading AI model (first run, 20-60s)...'})}\n\n"
             for event in pipe.screen_stream(image):
                 yield f"data: {json.dumps(event)}\n\n"
@@ -179,7 +177,7 @@ async def model_status():
     )
     return {
         "warming": model_warming,
-        "fallback": bool(classifier and getattr(classifier, "_fallback", False)),
+        "fallback": False,
         "error": pipeline_error if not model_loaded else "",
         "models": {
             "classifier": model_loaded,

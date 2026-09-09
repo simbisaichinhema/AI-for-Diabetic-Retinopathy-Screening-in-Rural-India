@@ -183,7 +183,10 @@ def assess_image_quality(
 
     usable = (
         overall >= min_overall
-        and (focus >= min_focus or illumination >= min_illumination)
+        and focus >= min_focus
+        and illumination >= min_illumination
+        and fov >= min_fov
+        and fundus >= min_fundus
     )
 
     reason = "Quality sufficient for screening" if usable else "; ".join(reasons)

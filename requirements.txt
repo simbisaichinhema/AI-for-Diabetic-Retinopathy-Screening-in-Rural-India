@@ -2,6 +2,7 @@
 
 # Deep Learning
 keras>=3.5.0
+torch>=2.0.0
 jax>=0.4.30
 jaxlib>=0.4.30
 huggingface-hub>=0.24.0

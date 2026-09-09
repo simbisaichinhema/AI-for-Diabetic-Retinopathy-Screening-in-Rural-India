@@ -1,6 +1,6 @@
 """Tests for DR classifier (matches inference/classifier.py API)."""
 
-import numpy as np
+import pytest
 
 import sys
 from pathlib import Path
@@ -28,13 +28,13 @@ class TestDRClassifier:
         probs = {"0": 0.5, "1": 0.2, "2": 0.15, "3": 0.1, "4": 0.05}
         assert classifier.compute_referable_probability(probs) == 0.3
 
-    def test_predict_fallback_without_model(self):
-        """Without HF model, predict() must return flagged demo output, not crash."""
+    def test_predict_without_model_fails_closed(self, monkeypatch):
+        """Without the HF model, prediction must fail rather than synthesize results."""
         classifier = DRClassifier()
-        classifier._fallback = True
+        classifier.model = None
         classifier._load_error = "unit-test"
-        out = classifier.predict(np.zeros((1, 224, 224, 3), dtype=np.float32))
-        assert out["grade"] == 0
-        assert out["label"] == "No DR"
-        assert out["fallback"] is True
-        assert abs(sum(out["probabilities"].values()) - 1.0) < 0.01
+        def fail_load():
+            raise RuntimeError("unit-test")
+        monkeypatch.setattr(classifier, "load_model", fail_load)
+        with pytest.raises(RuntimeError, match="unit-test"):
+            classifier.predict(None)

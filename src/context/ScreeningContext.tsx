@@ -200,31 +200,17 @@ export const ScreeningProvider: React.FC<{ children: ReactNode }> = ({ children 
       if (result) rightMetrics = result;
     }
 
-    // Ensure metrics are marked ACCEPTED so user can proceed seamlessly
-    const ensurePass = (q: ImageQualityMetrics | null): ImageQualityMetrics => ({
-      focus: {
-        status: 'Good',
-        score: q?.focus?.score && q.focus.score > 50 ? q.focus.score : 312.5,
-        details: 'Vascular focus verified (Laplacian variance optimal)',
-      },
-      illumination: {
-        status: 'Good',
-        score: q?.illumination?.score && q.illumination.score > 50 ? q.illumination.score : 218.4,
-        details: 'Luminance exposure uniform across macula and disc',
-      },
-      fieldOfView: {
-        status: 'Good',
-        details: '45° Diagnostic Field verified',
-      },
-      fundusValidity: {
-        isValid: true,
-        details: 'Verified retinal fundus structure',
-      },
-      overallStatus: 'ACCEPTED',
+    const rejectedQuality = (reason: string): ImageQualityMetrics => ({
+      focus: { status: 'Insufficient', details: reason },
+      illumination: { status: 'Insufficient', details: reason },
+      fieldOfView: { status: 'Insufficient', details: reason },
+      fundusValidity: { isValid: false, details: reason },
+      overallStatus: 'REJECTED',
+      failureReasons: [reason],
     });
 
-    const finalLeftQuality = ensurePass(leftMetrics);
-    const finalRightQuality = ensurePass(rightMetrics);
+    const finalLeftQuality = leftMetrics || rejectedQuality('No quality result received from the screening backend.');
+    const finalRightQuality = rightMetrics || rejectedQuality('No quality result received from the screening backend.');
 
     await delay(600);
     setQualityProgress(100);

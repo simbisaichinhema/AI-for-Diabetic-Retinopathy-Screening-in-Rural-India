@@ -36,8 +36,8 @@ export const ResultsDashboard: React.FC = () => {
 
   const leftEye = exam.leftEye;
   const rightEye = exam.rightEye;
-  const overallGrade = exam.overallGrade ?? 0;
-  const overallGradeInfo = DR_GRADES[overallGrade];
+  const overallGrade = exam.overallGrade;
+  const overallGradeInfo = overallGrade === null ? null : DR_GRADES[overallGrade];
 
   const isReviewDone = exam.clinicalReview.clinicalGrade !== null || Boolean(saveStatusMsg);
 
@@ -117,8 +117,8 @@ export const ResultsDashboard: React.FC = () => {
             <div className="banner-top-row">
               <div className="banner-grade-badge">
                 <span className="grade-pill-tag">AI DIAGNOSIS</span>
-                <span className="grade-title-text">{overallGradeInfo.label}</span>
-                <span className="grade-index-tag">GRADE {overallGrade} OF 4</span>
+                <span className="grade-title-text">{overallGradeInfo?.label || 'AI result unavailable'}</span>
+                <span className="grade-index-tag">GRADE {overallGrade ?? '—'} OF 4</span>
               </div>
 
               <div className="banner-referral-block">
@@ -139,7 +139,7 @@ export const ResultsDashboard: React.FC = () => {
               </div>
             </div>
 
-            <p className="banner-desc-text">{overallGradeInfo.description}</p>
+            <p className="banner-desc-text">{overallGradeInfo?.description || 'No valid AI classification is available for this examination.'}</p>
           </section>
 
           {/* Section 2: Bilateral Retinal Imaging with GradCAM & Enhanced Toggles */}
@@ -343,7 +343,7 @@ export const ResultsDashboard: React.FC = () => {
             <div className="ai-readout-box">
               <div className="readout-lbl">AI ASSESSMENT PREDICTION</div>
               <div className="readout-val">
-                Grade {overallGrade} — {overallGradeInfo.shortLabel}
+                {overallGradeInfo ? `Grade ${overallGrade} — ${overallGradeInfo.shortLabel}` : 'AI result unavailable'}
               </div>
             </div>
 
@@ -354,7 +354,8 @@ export const ResultsDashboard: React.FC = () => {
                 <select
                   id="clinical-grade-select"
                   className="field-select"
-                  value={exam.clinicalReview.clinicalGrade ?? overallGrade}
+                  value={exam.clinicalReview.clinicalGrade ?? (overallGrade === null ? '' : overallGrade)}
+                  disabled={overallGrade === null}
                   onChange={(e) => updateClinicalReview({ clinicalGrade: Number(e.target.value) as DRGradeIndex })}
                 >
                   <option value={0}>No DR (Grade 0)</option>

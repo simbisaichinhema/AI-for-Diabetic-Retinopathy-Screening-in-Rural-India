@@ -22,13 +22,13 @@ export const QualityResultsPage: React.FC = () => {
   const leftQuality = exam.leftEye.quality;
   const rightQuality = exam.rightEye.quality;
 
-  const isLeftAccepted = leftQuality?.overallStatus === 'ACCEPTED' || (leftQuality?.focus?.status === 'Good' || leftQuality?.focus?.status === 'Acceptable');
-  const isRightAccepted = rightQuality?.overallStatus === 'ACCEPTED' || (rightQuality?.focus?.status === 'Good' || rightQuality?.focus?.status === 'Acceptable');
+  const isLeftAccepted = leftQuality?.overallStatus === 'ACCEPTED';
+  const isRightAccepted = rightQuality?.overallStatus === 'ACCEPTED';
 
   const renderEyeCard = (eye: EyeData, isAccepted: boolean) => {
     const q = eye.quality;
-    const focusVal = q?.focus?.score ? `${(q.focus.score / 4).toFixed(1)}% (Laplacian: ${q.focus.score.toFixed(1)})` : '98.5% (Optimal)';
-    const illumVal = q?.illumination?.score ? `${((q.illumination.score / 255) * 100).toFixed(1)}% (Uniform)` : '88.4% (Uniform)';
+    const focusVal = q?.focus?.score !== undefined ? `${(q.focus.score / 4).toFixed(1)}% (Laplacian: ${q.focus.score.toFixed(1)})` : 'Unavailable';
+    const illumVal = q?.illumination?.score !== undefined ? `${((q.illumination.score / 255) * 100).toFixed(1)}% (Measured)` : 'Unavailable';
 
     return (
       <div className="qr-eye-card">
@@ -67,15 +67,19 @@ export const QualityResultsPage: React.FC = () => {
           </div>
           <div className="qr-metric-row">
             <span className="m-label">Field of View</span>
-            <span className="m-value">45° Diagnostic Field</span>
+            <span className="m-value">{q?.fieldOfView.details || 'Unavailable'}</span>
           </div>
           <div className="qr-metric-row">
             <span className="m-label">Fundus Validity</span>
-            <span className="m-value text-emerald">Verified Human Fundus</span>
+            <span className={`m-value ${q?.fundusValidity.isValid ? 'text-emerald' : 'text-red'}`}>
+              {q?.fundusValidity.details || 'Unavailable'}
+            </span>
           </div>
           <div className="qr-metric-row row-overall">
             <span className="m-label">Quality Gate</span>
-            <span className="m-value font-bold text-emerald">ACCEPTED</span>
+            <span className={`m-value font-bold ${isAccepted ? 'text-emerald' : 'text-red'}`}>
+              {q?.overallStatus || 'PENDING'}
+            </span>
           </div>
         </div>
 
@@ -104,14 +108,16 @@ export const QualityResultsPage: React.FC = () => {
             </div>
             <h1 className="qr-main-title">Bilateral Quality Assessment Results</h1>
             <p className="qr-main-subtitle">
-              Optical verification confirmed. Both retinal scans satisfy clinical diagnostic thresholds.
+              {isLeftAccepted && isRightAccepted
+                ? 'Both retinal scans satisfy the configured diagnostic quality thresholds.'
+                : 'One or more retinal scans failed quality verification and require recapture.'}
             </p>
           </div>
 
           <div className="qr-header-right">
             <div className="qr-gate-status-badge">
               <ShieldCheck size={16} className="text-emerald" />
-              <span>QUALITY GATE: PASSED</span>
+              <span>QUALITY GATE: {isLeftAccepted && isRightAccepted ? 'PASSED' : 'RECAPTURE REQUIRED'}</span>
             </div>
           </div>
         </div>
@@ -134,6 +140,7 @@ export const QualityResultsPage: React.FC = () => {
               id="btn-run-analysis"
               className="qr-btn-primary"
               onClick={runRetinalAnalysis}
+              disabled={!isLeftAccepted || !isRightAccepted}
             >
               <span>Proceed to AI Retinal Analysis</span>
               <ArrowRight size={16} />

@@ -62,10 +62,10 @@ export interface BackendScreenResponse {
     definition: string;
   };
   lesions?: {
-    microaneurysms?: { detected: boolean; count: number; locations?: number[][] };
-    hemorrhages?: { detected: boolean; count: number; locations?: number[][] };
-    exudates?: { detected: boolean; count: number; locations?: number[][] };
-    vessels?: { mean_width?: number; vessel_density?: number; status?: string };
+    microaneurysms?: { detected: boolean; count: number; confidence?: number; locations?: number[][] };
+    hemorrhages?: { detected: boolean; count: number; confidence?: number; locations?: number[][] };
+    exudates?: { detected: boolean; count: number; confidence?: number; locations?: number[][] };
+    vessels?: { mean_width?: number; vessel_density?: number; quality?: string; status?: string };
   };
   gradcam_image?: string | null;
   enhanced_image?: string | null;
@@ -288,6 +288,10 @@ export class ClinicalApiService {
       throw new Error('Screening stream finished without returning final result');
     }
 
+    if (finalResult.status !== 'completed') {
+      throw new Error(finalResult.message || 'Screening could not produce a valid analysis result');
+    }
+
     return finalResult;
   }
 
@@ -453,12 +457,12 @@ export class ClinicalApiService {
 
     if (res.lesions) {
       const evidence: RetinalEvidence = {
-        microaneurysms: res.lesions.microaneurysms ? { count: res.lesions.microaneurysms.count, confidence: 0.85 } : null,
-        hemorrhages: res.lesions.hemorrhages ? { count: res.lesions.hemorrhages.count, confidence: 0.82 } : null,
-        exudates: res.lesions.exudates ? { count: res.lesions.exudates.count, confidence: 0.80 } : null,
-        vesselAbnormalities: res.lesions.vessels ? 'Mild' : 'None',
+        microaneurysms: res.lesions.microaneurysms ? { count: res.lesions.microaneurysms.count, confidence: res.lesions.microaneurysms.confidence ?? 0 } : null,
+        hemorrhages: res.lesions.hemorrhages ? { count: res.lesions.hemorrhages.count, confidence: res.lesions.hemorrhages.confidence ?? 0 } : null,
+        exudates: res.lesions.exudates ? { count: res.lesions.exudates.count, confidence: res.lesions.exudates.confidence ?? 0 } : null,
+        vesselAbnormalities: res.lesions.vessels?.quality === 'High density' ? 'Moderate' : res.lesions.vessels?.quality === 'Normal' ? 'Mild' : 'Not available',
         macularInvolvement: false,
-        statusNote: 'Heuristic Detection',
+        statusNote: 'Computer-vision heuristic evidence; ophthalmologist confirmation required',
       };
       eye.evidence = evidence;
     }

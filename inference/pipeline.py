@@ -53,7 +53,7 @@ class DRScreeningPipeline:
 
     def _generate_gradcam_b64(self, image: np.ndarray, input_tensor: np.ndarray, predicted_grade: int) -> Optional[str]:
         """Generate base64 encoded Grad-CAM overlay image if model is available."""
-        if self.classifier.model is None or getattr(self.classifier, "_fallback", False):
+        if self.classifier.model is None:
             return None
         try:
             _, heatmap_resized = compute_gradcam(
@@ -95,11 +95,22 @@ class DRScreeningPipeline:
         # Quality assessment
         quality_obj = self.quality_gate.assess(image)
         quality = quality_obj.to_dict() if hasattr(quality_obj, 'to_dict') else dict(quality_obj)
-        quality["focus"] = quality.get("focus", quality.get("focus_score", 0.95))
-        quality["illumination"] = quality.get("illumination", quality.get("illumination_score", 0.90))
-        quality["field_of_view"] = quality.get("field_of_view", quality.get("fov_score", 0.95))
-        quality["overall"] = quality.get("overall", quality.get("overall_score", 0.95))
-        quality["usable"] = quality.get("usable", True)
+        quality["focus"] = quality.get("focus", quality.get("focus_score", 0.0))
+        quality["illumination"] = quality.get("illumination", quality.get("illumination_score", 0.0))
+        quality["field_of_view"] = quality.get("field_of_view", quality.get("fov_score", 0.0))
+        quality["overall"] = quality.get("overall", quality.get("overall_score", 0.0))
+        quality["usable"] = quality.get("usable", False)
+
+        if not quality["usable"]:
+            return {
+                "case_id": case_id,
+                "status": "recapture_required",
+                "quality": quality,
+                "dr_prediction": None,
+                "referable_dr": None,
+                "report": None,
+                "message": quality.get("reason", "Image did not meet quality thresholds; recapture required."),
+            }
 
         processed = preprocess_for_model(
             image,
@@ -188,19 +199,38 @@ class DRScreeningPipeline:
         # Stage 2: Quality assessment
         quality_obj = self.quality_gate.assess(image)
         quality = quality_obj.to_dict() if hasattr(quality_obj, 'to_dict') else dict(quality_obj)
-        quality["focus"] = quality.get("focus", quality.get("focus_score", 0.95))
-        quality["illumination"] = quality.get("illumination", quality.get("illumination_score", 0.90))
-        quality["field_of_view"] = quality.get("field_of_view", quality.get("fov_score", 0.95))
-        quality["overall"] = quality.get("overall", quality.get("overall_score", 0.95))
-        quality["usable"] = quality.get("usable", True)
+        quality["focus"] = quality.get("focus", quality.get("focus_score", 0.0))
+        quality["illumination"] = quality.get("illumination", quality.get("illumination_score", 0.0))
+        quality["field_of_view"] = quality.get("field_of_view", quality.get("fov_score", 0.0))
+        quality["overall"] = quality.get("overall", quality.get("overall_score", 0.0))
+        quality["usable"] = quality.get("usable", False)
 
         overall_pct = f"{quality['overall'] * 100:.1f}%"
         yield {
             "type": "stage",
             "name": "quality_check",
-            "message": f"Quality check passed — {overall_pct} overall",
+            "message": (
+                f"Quality check passed — {overall_pct} overall"
+                if quality["usable"]
+                else f"Quality check failed — {overall_pct} overall; recapture required"
+            ),
             "data": quality,
         }
+
+        if not quality["usable"]:
+            yield {
+                "type": "result",
+                "data": {
+                    "case_id": case_id,
+                    "status": "recapture_required",
+                    "quality": quality,
+                    "dr_prediction": None,
+                    "referable_dr": None,
+                    "report": None,
+                    "message": quality.get("reason", "Image did not meet quality thresholds; recapture required."),
+                },
+            }
+            return
 
         # Stage 3: Preprocessing
         processed = preprocess_for_model(

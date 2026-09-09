@@ -16,7 +16,6 @@ except Exception:
     pass
 
 import numpy as np
-import keras
 from typing import Dict, Any
 
 import sys
@@ -44,7 +43,6 @@ class DRClassifier:
     def __init__(self):
         self.model = None
         self._loaded = False
-        self._fallback = False
         self._load_error = ""
 
     def load_model(self) -> None:
@@ -54,6 +52,7 @@ class DRClassifier:
 
         try:
             from huggingface_hub import hf_hub_download
+            import keras
 
             model_path = hf_hub_download(
                 repo_id=HF_MODEL_ID,
@@ -61,36 +60,23 @@ class DRClassifier:
             )
             self.model = keras.saving.load_model(model_path)
             self._loaded = True
-            self._fallback = False
             print(f"Model loaded. Input: {self.model.input_shape}, Output: {self.model.output_shape}")
         except Exception as e:
-            # Fallback demo mode so UI never dead-ends in competition/offline.
             self._load_error = str(e)
-            self._fallback = True
             self._loaded = False
-            print(f"WARNING: model load failed, using fallback demo mode: {e}")
-            return
+            raise RuntimeError(f"Unable to load Hugging Face model {HF_MODEL_ID}/{HF_REPO_FILE}: {e}") from e
 
     def predict(self, image: np.ndarray) -> Dict[str, Any]:
         """Predict DR severity from a preprocessed image.
 
-        Falls back to a deterministic demo distribution when the
-        HF model is unavailable, so the workflow stays demonstrable.
+        Raises when the configured model is unavailable. Clinical results
+        must never be synthesized when model loading fails.
         """
-        if self.model is None and not self._fallback:
+        if self.model is None:
             self.load_model()
 
-        if self.model is None or self._fallback:
-            # Demo fallback: neutral distribution, clearly flagged.
-            probs = np.array([0.55, 0.20, 0.15, 0.06, 0.04], dtype=np.float32)
-            return {
-                "grade": 0,
-                "label": CLASS_NAMES[0],
-                "confidence": round(float(probs[0]), 4),
-                "probabilities": {str(i): round(float(probs[i]), 4) for i in range(5)},
-                "fallback": True,
-                "note": f"Demo prediction (model unavailable: {self._load_error[:200]})" if self._load_error else "Demo prediction (model unavailable)",
-            }
+        if self.model is None:
+            raise RuntimeError(self._load_error or "Classifier model is unavailable")
 
         raw_output = self.model.predict(image, verbose=0)
         probabilities = raw_output[0]

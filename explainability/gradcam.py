@@ -13,7 +13,6 @@ import cv2
 from typing import Tuple, Optional
 import os
 os.environ["KERAS_BACKEND"] = "torch"
-import keras
 
 
 def find_last_conv_layer(model) -> str:
@@ -48,6 +47,7 @@ def compute_gradcam(
 
     try:
         import torch
+        import keras
         if last_conv_layer_name is None:
             last_conv_layer_name = find_last_conv_layer(model)
 
@@ -79,13 +79,7 @@ def compute_gradcam(
         heatmap_resized = cv2.resize(heatmap_raw, (img_w, img_h))
         return heatmap_raw, heatmap_resized
     except Exception as e:
-        # Robust fallback synthetic activation focused on macula/retina
-        y, x = np.ogrid[:img_h, :img_w]
-        center_y, center_x = img_h // 2, img_w // 2
-        dist = np.sqrt((x - center_x) ** 2 + (y - center_y) ** 2)
-        heatmap_resized = np.exp(-dist ** 2 / (2 * (min(img_h, img_w) * 0.3) ** 2))
-        heatmap_raw = cv2.resize(heatmap_resized, (7, 7))
-        return heatmap_raw, heatmap_resized
+        raise RuntimeError(f"Grad-CAM generation failed: {e}") from e
 
 
 def generate_gradcam_overlay(

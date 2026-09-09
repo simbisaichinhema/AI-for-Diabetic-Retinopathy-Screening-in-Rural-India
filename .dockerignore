@@ -1,0 +1,14 @@
+.git
+.venv
+node_modules
+dist
+frontend
+.playwright-mcp
+__pycache__
+*.pyc
+.pytest_cache
+.cache
+models
+data/*
+!data/idrid/
+!data/idrid/**

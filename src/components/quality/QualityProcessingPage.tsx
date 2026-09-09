@@ -136,11 +136,11 @@ export const QualityProcessingPage: React.FC = () => {
                 <div className="qp-eye-metrics">
                   <div className="qp-m-row">
                     <span>Sharpness:</span>
-                    <strong>312.5 Score</strong>
+                    <strong>{exam.leftEye.quality?.focus.score !== undefined ? `${exam.leftEye.quality.focus.score.toFixed(1)} measured` : 'Measuring...'}</strong>
                   </div>
                   <div className="qp-m-row">
                     <span>Illumination:</span>
-                    <strong>88% Optimal</strong>
+                    <strong>{exam.leftEye.quality?.illumination.score !== undefined ? `${((exam.leftEye.quality.illumination.score / 255) * 100).toFixed(1)}% measured` : 'Measuring...'}</strong>
                   </div>
                 </div>
               </div>
@@ -173,11 +173,11 @@ export const QualityProcessingPage: React.FC = () => {
                 <div className="qp-eye-metrics">
                   <div className="qp-m-row">
                     <span>Sharpness:</span>
-                    <strong>298.7 Score</strong>
+                    <strong>{exam.rightEye.quality?.focus.score !== undefined ? `${exam.rightEye.quality.focus.score.toFixed(1)} measured` : 'Measuring...'}</strong>
                   </div>
                   <div className="qp-m-row">
                     <span>Illumination:</span>
-                    <strong>84% Optimal</strong>
+                    <strong>{exam.rightEye.quality?.illumination.score !== undefined ? `${((exam.rightEye.quality.illumination.score / 255) * 100).toFixed(1)}% measured` : 'Measuring...'}</strong>
                   </div>
                 </div>
               </div>
