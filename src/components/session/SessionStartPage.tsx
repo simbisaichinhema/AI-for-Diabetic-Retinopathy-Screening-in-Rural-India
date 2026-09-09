@@ -302,12 +302,12 @@ export const SessionStartPage: React.FC = () => {
                 <div className="ss-info-helper-card panel-enter">
                   <div className="ss-placeholder-people" aria-hidden="true">
                     <div className="ss-placeholder-person">
-                      <img src="/assets/head_reference_left.jpg" alt="" />
-                      <span><User size={13} /> LEFT EYE (OS)</span>
+                      <img src="/assets/fundus_bg.png" alt="Fundus preview" />
+                      <span><User size={13} /> OS FUNDUS PREVIEW</span>
                     </div>
                     <div className="ss-placeholder-person">
-                      <img src="/assets/head_reference_right.jpg" alt="" />
-                      <span><User size={13} /> RIGHT EYE (OD)</span>
+                      <img src="/assets/fundus_bg.png" alt="Fundus preview" />
+                      <span><User size={13} /> OD FUNDUS PREVIEW</span>
                     </div>
                   </div>
                   <h3 className="ss-helper-title">Patient profile preview</h3>

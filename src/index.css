@@ -6323,6 +6323,24 @@ html, body {
 /* Intake shell - ensure both columns are same height */
 .ss-intake-shell {
   align-items: stretch !important;
+  width: min(76vw, 1240px) !important;
+  min-height: min(500px, calc(100vh - 180px));
+  gap: 24px !important;
+}
+
+.ss-input-panel,
+.ss-profile-panel {
+  flex: 1 1 0 !important;
+  max-width: none !important;
+  min-width: 0;
+}
+
+.ss-input-panel {
+  padding: 38px !important;
+}
+
+.ss-profile-panel {
+  min-height: 0 !important;
 }
 
 .ss-placeholder-people {
@@ -6670,6 +6688,8 @@ html, body {
   }
 
   .ss-intake-shell {
+    width: 100% !important;
+    min-height: 0;
     padding: 20px 14px !important;
     gap: 16px !important;
   }
