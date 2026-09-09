@@ -6459,10 +6459,10 @@ html, body {
 
 /* Put the retinal image above the product name on the opening screen. */
 .ss-hero-grid {
-  flex-direction: column !important;
-  gap: 18px !important;
-  max-width: 720px !important;
-  padding: 28px 24px !important;
+  flex-direction: row !important;
+  gap: 3.5rem !important;
+  max-width: 1100px !important;
+  padding: 1.5rem 1rem !important;
 }
 
 .ss-hero-graphic {
@@ -6471,21 +6471,21 @@ html, body {
 
 .ss-hero-text-block {
   order: 1;
-  align-items: center !important;
-  text-align: center !important;
-  max-width: 640px !important;
+  align-items: flex-start !important;
+  text-align: left !important;
+  max-width: 540px !important;
 }
 
 .ss-fundus-frame {
-  width: 210px !important;
-  height: 210px !important;
-  box-shadow: 0 18px 42px rgba(15, 23, 42, 0.18), 0 0 0 8px rgba(255, 255, 255, 0.86) !important;
+  width: 320px !important;
+  height: 320px !important;
+  box-shadow: 0 20px 50px -10px rgba(15, 23, 42, 0.18), 0 0 0 12px rgba(255, 255, 255, 0.8) !important;
 }
 
 .ss-target-ring {
-  width: 34px !important;
-  height: 34px !important;
-  border-width: 2px !important;
+  width: 48px !important;
+  height: 48px !important;
+  border-width: 3px !important;
 }
 
 .ss-hero-label {
@@ -6495,13 +6495,13 @@ html, body {
 }
 
 .ss-hero-title {
-  font-size: clamp(26px, 4vw, 40px) !important;
+  font-size: 2.35rem !important;
   line-height: 1.08 !important;
   margin-bottom: 8px !important;
 }
 
 .ss-hero-sub {
-  font-size: 12px !important;
+  font-size: 0.98rem !important;
   margin-bottom: 14px !important;
 }
 
@@ -6521,6 +6521,17 @@ html, body {
 }
 
 @media (max-width: 760px) {
+  .ss-hero-grid {
+    flex-direction: column !important;
+    gap: 18px !important;
+    padding: 28px 20px !important;
+  }
+
+  .ss-hero-text-block {
+    align-items: center !important;
+    text-align: center !important;
+  }
+
   .acq-workstation {
     padding: 12px;
     overflow-y: auto;
@@ -6550,5 +6561,151 @@ html, body {
   .ss-fundus-frame {
     width: 170px !important;
     height: 170px !important;
+  }
+}
+
+/* Whole-app mobile layout */
+@media (max-width: 900px) {
+  .clinical-app-shell {
+    display: block;
+  }
+
+  .clinical-sidebar {
+    width: 100%;
+    min-width: 0;
+    min-height: auto;
+    position: relative;
+  }
+
+  .sidebar-header {
+    padding: 12px 16px;
+  }
+
+  .sidebar-nav {
+    padding: 8px 12px;
+    flex-direction: row;
+    overflow-x: auto;
+    gap: 6px;
+    scrollbar-width: none;
+  }
+
+  .sidebar-nav::-webkit-scrollbar {
+    display: none;
+  }
+
+  .sidebar-nav-item {
+    flex: 0 0 auto;
+    padding: 8px 10px;
+    font-size: 11px;
+    white-space: nowrap;
+  }
+
+  .sidebar-footer {
+    display: none;
+  }
+
+  .clinical-main-content {
+    min-width: 0;
+  }
+
+  .clinical-workflow-bar {
+    padding: 0 12px;
+    overflow-x: auto;
+  }
+
+  .workflow-steps-track {
+    min-width: max-content;
+  }
+
+  .wf-block {
+    min-width: 112px;
+    padding: 0 10px;
+  }
+
+  .clinical-page-container {
+    padding: 14px 12px;
+  }
+
+  .clinical-page-container.workflow-fullwidth {
+    padding: 0 !important;
+  }
+
+  .results-workspace-grid,
+  .quality-results-grid,
+  .bilateral-eye-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .dashboard-main-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .dashboard-side-col {
+    order: 2;
+  }
+
+  .clinical-footer {
+    padding: 12px;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 6px;
+  }
+
+  .ss-header {
+    padding: 10px 14px !important;
+  }
+
+  .ss-header-right {
+    gap: 5px;
+    font-size: 10px;
+  }
+
+  .ss-logo {
+    height: 42px !important;
+  }
+
+  .ss-team,
+  .ss-divider:nth-of-type(2) {
+    display: none;
+  }
+
+  .ss-intake-shell {
+    padding: 20px 14px !important;
+    gap: 16px !important;
+  }
+
+  .ss-input-panel,
+  .ss-profile-panel {
+    width: 100%;
+    max-width: none;
+  }
+
+  .ss-input-panel {
+    padding: 20px !important;
+  }
+
+  .acq-controls-column {
+    min-width: 0;
+  }
+
+  .qr-card-container,
+  .acq-card-container {
+    width: calc(100% - 24px);
+  }
+
+  .qr-body-grid,
+  .retinal-imaging-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .qr-action-bar,
+  .acq-captured-card {
+    flex-wrap: wrap;
+  }
+
+  .qr-btn-primary,
+  .btn-acq-next,
+  .btn-acq-replace {
+    min-height: 40px;
   }
 }

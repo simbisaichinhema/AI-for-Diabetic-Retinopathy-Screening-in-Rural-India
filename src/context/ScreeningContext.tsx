@@ -190,13 +190,13 @@ export const ScreeningProvider: React.FC<{ children: ReactNode }> = ({ children 
 
     let leftMetrics = exam.leftEye.quality;
     if (exam.leftEye.imageSrc) {
-      const result = await withTimeout(apiService.assessQuality(exam.leftEye), 4000);
+      const result = await withTimeout(apiService.assessQuality(exam.leftEye), 30000);
       if (result) leftMetrics = result;
     }
 
     let rightMetrics = exam.rightEye.quality;
     if (exam.rightEye.imageSrc) {
-      const result = await withTimeout(apiService.assessQuality(exam.rightEye), 4000);
+      const result = await withTimeout(apiService.assessQuality(exam.rightEye), 30000);
       if (result) rightMetrics = result;
     }
 
