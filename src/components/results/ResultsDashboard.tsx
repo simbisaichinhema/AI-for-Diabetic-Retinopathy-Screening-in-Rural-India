@@ -31,6 +31,7 @@ export const ResultsDashboard: React.FC = () => {
   } = useScreening();
 
   const [saveStatusMsg, setSaveStatusMsg] = useState<string | null>(null);
+  const [isEditingReview, setIsEditingReview] = useState(false);
   const [leftEyeMode, setLeftEyeMode] = useState<'color' | 'gradcam' | 'enhanced'>('gradcam');
   const [rightEyeMode, setRightEyeMode] = useState<'color' | 'gradcam' | 'enhanced'>('gradcam');
 
@@ -50,8 +51,18 @@ export const ResultsDashboard: React.FC = () => {
     const success = await saveClinicalReview();
     if (success) {
       setSaveStatusMsg('Clinical assessment saved.');
+      setIsEditingReview(false);
       setTimeout(() => setSaveStatusMsg(null), 4000);
     }
+  };
+
+  const useAiAssessment = () => {
+    if (overallGrade === null) return;
+    updateClinicalReview({
+      clinicalGrade: overallGrade,
+      clinicalReferable: Boolean(exam.overallReferable),
+    });
+    setIsEditingReview(true);
   };
 
   const getEyeDisplaySrc = (eye: typeof leftEye, mode: 'color' | 'gradcam' | 'enhanced') => {
@@ -377,7 +388,19 @@ export const ResultsDashboard: React.FC = () => {
               </div>
             </div>
 
-            {/* Clinical Assessment Form */}
+            {!isEditingReview && !isReviewDone ? (
+              <div className="review-quick-actions">
+                <p>Review the bilateral images, evidence, and probability bars before confirming the AI screening result.</p>
+                <button type="button" className="btn-review-save" onClick={useAiAssessment} disabled={overallGrade === null}>
+                  <CheckCircle2 size={14} />
+                  <span>Use AI Result as Draft</span>
+                </button>
+                <button type="button" className="btn-review-reset" onClick={() => setIsEditingReview(true)}>
+                  <span>Edit Assessment</span>
+                </button>
+              </div>
+            ) : (
+            /* Detailed form stays available on demand. */
             <div className="review-form-body">
               <div className="form-field-group">
                 <label className="field-lbl" htmlFor="clinical-grade-select">Final Assessment (Grade)</label>
@@ -471,8 +494,13 @@ export const ResultsDashboard: React.FC = () => {
                   <RotateCcw size={14} />
                   <span>Reset</span>
                 </button>
+
+                <button type="button" className="btn-review-reset" onClick={() => setIsEditingReview(false)}>
+                  <span>Hide Details</span>
+                </button>
               </div>
             </div>
+            )}
 
             <div className="review-disclaimer-footer">
               AI-assisted screening prototype · Clinical review required.

@@ -3956,6 +3956,25 @@ html, body {
   display: block;
 }
 
+.review-quick-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 12px 0 2px;
+}
+
+.review-quick-actions p {
+  margin: 0 0 4px;
+  color: #64748b;
+  font-size: 11px;
+  line-height: 1.45;
+}
+
+.review-quick-actions .btn-review-save,
+.review-quick-actions .btn-review-reset {
+  width: 100%;
+}
+
 .review-priority-note strong {
   color: #7c2d12;
   font-size: 11px;
