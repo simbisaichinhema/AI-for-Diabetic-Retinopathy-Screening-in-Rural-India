@@ -250,9 +250,31 @@ export const ReportModal: React.FC = () => {
             </table>
           </div>
 
+          {exam.previousExams.length > 0 && (
+            <div className="doc-section page-break-inside-avoid">
+              <div className="sec-header">4. LONGITUDINAL TREND — DEMO DATA</div>
+              <div className="report-demo-notice">
+                Synthetic demonstration history for presentation only. It is not a patient medical record and must not guide care.
+              </div>
+              <table className="doc-table">
+                <thead><tr><th>DATE</th><th>AI GRADE</th><th>REFERABLE</th><th>NOTE</th></tr></thead>
+                <tbody>
+                  {exam.previousExams.map((previous) => (
+                    <tr key={previous.id}>
+                      <td>{previous.date}</td>
+                      <td>{previous.gradeLabel}</td>
+                      <td>{previous.isReferable ? 'YES' : 'NO'}</td>
+                      <td>{previous.notes || 'Demo longitudinal record'}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          )}
+
           {/* Section 5: Reviewing Ophthalmologist Verification & Signature Block */}
           <div className="doc-section page-break-inside-avoid">
-            <div className="sec-header">4. REVIEWING OPHTHALMOLOGIST VERIFICATION</div>
+            <div className="sec-header">5. REVIEWING OPHTHALMOLOGIST VERIFICATION</div>
             <div className="ophthalmologist-review-box">
               <div className="ophth-grid">
                 <div>

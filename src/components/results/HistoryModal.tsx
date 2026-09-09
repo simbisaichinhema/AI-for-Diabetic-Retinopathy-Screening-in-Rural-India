@@ -60,6 +60,11 @@ export const HistoryModal: React.FC = () => {
 
         {/* Modal Content */}
         <div style={{ padding: 20, maxHeight: '65vh', overflowY: 'auto' }}>
+          {exam.previousExams.length > 0 && (
+            <div style={{ padding: '9px 12px', marginBottom: 14, borderRadius: 6, background: '#fff7ed', border: '1px solid #fed7aa', color: '#9a3412', fontSize: 11, fontWeight: 700 }}>
+              DEMO DATA — synthetic longitudinal examples for presentation only. These records are not clinical history.
+            </div>
+          )}
           <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
             {/* Current Exam */}
             <div style={{

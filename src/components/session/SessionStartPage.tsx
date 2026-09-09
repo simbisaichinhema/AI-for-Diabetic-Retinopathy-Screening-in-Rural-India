@@ -16,7 +16,7 @@ import {
   ChevronLeft,
 } from 'lucide-react';
 import { useScreening } from '../../context/ScreeningContext';
-import { Patient } from '../../types/clinical';
+import { Patient, PreviousExam } from '../../types/clinical';
 import { createInitialExamination } from '../../services/clinicalDefaults';
 
 type Stage = 'idle' | 'enter_id' | 'patient_found';
@@ -73,6 +73,20 @@ const fmt = (val: string) => {
 const riskColor = (r: PatientRecord['riskLevel']) =>
   r === 'HIGH' ? '#ef4444' : r === 'MODERATE' ? '#f59e0b' : '#10b981';
 
+const DEMO_HISTORY: Record<string, PreviousExam[]> = {
+  '543289012345': [
+    { id: 'DEMO-5432-01', date: '12 Jan 2024', grade: 0, gradeLabel: 'Grade 0 — No DR', isReferable: false, reviewerName: 'Demo record', notes: 'Synthetic baseline for demonstration.' },
+    { id: 'DEMO-5432-02', date: '18 Aug 2024', grade: 1, gradeLabel: 'Grade 1 — Mild DR', isReferable: false, reviewerName: 'Demo record', notes: 'Synthetic progression example.' },
+  ],
+  '789012345678': [
+    { id: 'DEMO-7890-01', date: '03 Mar 2024', grade: 0, gradeLabel: 'Grade 0 — No DR', isReferable: false, reviewerName: 'Demo record', notes: 'Synthetic baseline for demonstration.' },
+    { id: 'DEMO-7890-02', date: '22 Nov 2024', grade: 1, gradeLabel: 'Grade 1 — Mild DR', isReferable: false, reviewerName: 'Demo record', notes: 'Synthetic monitoring example.' },
+  ],
+  '901234567890': [
+    { id: 'DEMO-9012-01', date: '09 May 2024', grade: 0, gradeLabel: 'Grade 0 — No DR', isReferable: false, reviewerName: 'Demo record', notes: 'Synthetic baseline for demonstration.' },
+  ],
+};
+
 export const SessionStartPage: React.FC = () => {
   const { navigateToStep, setExam } = useScreening();
 
@@ -120,7 +134,9 @@ export const SessionStartPage: React.FC = () => {
       age: patient.age, sex: patient.sex,
       villageOrDistrict: patient.location,
     };
-    setExam(createInitialExamination(p));
+    const nextExam = createInitialExamination(p);
+    nextExam.previousExams = DEMO_HISTORY[patient.aadhaar.replace(/\s/g, '')] || [];
+    setExam(nextExam);
     navigateToStep('acquisition');
   };
 

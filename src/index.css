@@ -3939,6 +3939,17 @@ html, body {
   border: 1px solid #334155;
 }
 
+.report-demo-notice {
+  margin: 8px 0 10px;
+  padding: 8px 10px;
+  border: 1px solid #fed7aa;
+  border-radius: 4px;
+  background: #fff7ed;
+  color: #9a3412;
+  font-size: 10px;
+  font-weight: 700;
+}
+
 /* â”€â”€ Top Toolbar (Hidden on print) â”€â”€ */
 .report-toolbar {
   display: flex;
