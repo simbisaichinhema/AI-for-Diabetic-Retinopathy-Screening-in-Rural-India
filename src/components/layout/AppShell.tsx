@@ -5,8 +5,7 @@
  * Sidebar is ONLY shown in clinical_results (and is collapsible).
  */
 
-import React, { useState } from 'react';
-import { Sidebar } from './Sidebar';
+import React from 'react';
 import { WorkflowTracker } from './WorkflowTracker';
 import { useScreening } from '../../context/ScreeningContext';
 import { SessionStartPage } from '../session/SessionStartPage';
@@ -18,9 +17,6 @@ import { ResultsDashboard } from '../results/ResultsDashboard';
 
 export const AppShell: React.FC = () => {
   const { currentStep } = useScreening();
-  const [isSidebarCollapsed, setIsSidebarCollapsed] = useState<boolean>(false);
-
-  const isSessionStart = currentStep === 'session_start';
 
   const renderActiveStep = () => {
     switch (currentStep) {
@@ -41,24 +37,10 @@ export const AppShell: React.FC = () => {
     }
   };
 
-  // Session start is full-screen — no shell chrome at all
-  if (isSessionStart) {
-    return <>{renderActiveStep()}</>;
-  }
-
   return (
     <div className="clinical-app-shell">
-      <Sidebar
-        isCollapsed={isSidebarCollapsed}
-        onToggleCollapse={() => setIsSidebarCollapsed((prev) => !prev)}
-      />
-
-      {/* Main Clinical Station Workspace */}
       <div className="clinical-main-content">
-        {/* Workflow Tracker (currently returns null) */}
         <WorkflowTracker />
-
-        {/* Dynamic Page Container */}
         <main className={`clinical-page-container ${currentStep !== 'clinical_results' ? 'workflow-fullwidth' : ''}`}>
           {renderActiveStep()}
         </main>

@@ -80,7 +80,6 @@ export const AnalysisProcessingPage: React.FC = () => {
               Evaluating bilateral vascular morphology, microvascular lesions & severity grading.
             </p>
           </div>
-
           <div className="ap-header-right">
             <div className="ap-patient-chip">
               <span className="p-chip-label">PATIENT</span>

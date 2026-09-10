@@ -122,7 +122,6 @@ export const QualityResultsPage: React.FC = () => {
                 : 'One or more retinal scans failed quality verification and require recapture.'}
             </p>
           </div>
-
           <div className="qr-header-right">
             <div className="qr-gate-status-badge">
               <ShieldCheck size={16} className="text-emerald" />

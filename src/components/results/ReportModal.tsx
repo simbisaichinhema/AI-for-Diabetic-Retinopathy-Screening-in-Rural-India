@@ -95,7 +95,6 @@ export const ReportModal: React.FC = () => {
               <div className="lh-meta">
                 <div><strong>Report Date:</strong> {new Date().toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: '2-digit' })}</div>
                 <div><strong>Exam ID:</strong> {exam.id || 'EXAM-853543'}</div>
-                <div><strong>Model Engine:</strong> {exam.modelVersion}</div>
               </div>
             </div>
           </div>
@@ -162,50 +161,42 @@ export const ReportModal: React.FC = () => {
             <div className="sec-header">2. BILATERAL RETINAL FUNDUS PHOTOGRAPHS & EXPLAINABILITY</div>
             <div className="doc-imaging-grid">
               {/* Left Eye (OS) */}
-              <div className="doc-eye-column">
-                <div className="eye-doc-title">LEFT EYE (OS) — COLOR FUNDUS & GRAD-CAM ATTENTION</div>
-                <div className="doc-viewports-pair">
-                  <div className="doc-vp">
-                    {leftEye.imageSrc ? (
+              {leftEye.imageSrc && (
+                <div className="doc-eye-column">
+                  <div className="eye-doc-title">LEFT EYE (OS)</div>
+                  <div className="doc-viewports-pair">
+                    <div className="doc-vp">
                       <img src={leftEye.imageSrc} alt="Left Eye Fundus" />
-                    ) : (
-                      <div className="vp-missing">No fundus image uploaded</div>
+                      <span className="vp-caption">OS Color Fundus</span>
+                    </div>
+                    {leftEye.gradCamAvailable && leftEye.gradCamSrc && (
+                      <div className="doc-vp">
+                        <img src={leftEye.gradCamSrc} alt="Left Eye Grad-CAM" />
+                        <span className="vp-caption">OS Grad-CAM Attention</span>
+                      </div>
                     )}
-                    <span className="vp-caption">OS Color Fundus Image</span>
-                  </div>
-                  <div className="doc-vp">
-                    {leftEye.gradCamAvailable && leftEye.gradCamSrc ? (
-                      <img src={leftEye.gradCamSrc} alt="Left Eye Grad-CAM" />
-                    ) : (
-                      <div className="vp-missing">Model attention unavailable</div>
-                    )}
-                    <span className="vp-caption">OS Model Attention (Grad-CAM)</span>
                   </div>
                 </div>
-              </div>
+              )}
 
               {/* Right Eye (OD) */}
-              <div className="doc-eye-column">
-                <div className="eye-doc-title">RIGHT EYE (OD) — COLOR FUNDUS & GRAD-CAM ATTENTION</div>
-                <div className="doc-viewports-pair">
-                  <div className="doc-vp">
-                    {rightEye.imageSrc ? (
+              {rightEye.imageSrc && (
+                <div className="doc-eye-column">
+                  <div className="eye-doc-title">RIGHT EYE (OD)</div>
+                  <div className="doc-viewports-pair">
+                    <div className="doc-vp">
                       <img src={rightEye.imageSrc} alt="Right Eye Fundus" />
-                    ) : (
-                      <div className="vp-missing">No fundus image uploaded</div>
+                      <span className="vp-caption">OD Color Fundus</span>
+                    </div>
+                    {rightEye.gradCamAvailable && rightEye.gradCamSrc && (
+                      <div className="doc-vp">
+                        <img src={rightEye.gradCamSrc} alt="Right Eye Grad-CAM" />
+                        <span className="vp-caption">OD Grad-CAM Attention</span>
+                      </div>
                     )}
-                    <span className="vp-caption">OD Color Fundus Image</span>
-                  </div>
-                  <div className="doc-vp">
-                    {rightEye.gradCamAvailable && rightEye.gradCamSrc ? (
-                      <img src={rightEye.gradCamSrc} alt="Right Eye Grad-CAM" />
-                    ) : (
-                      <div className="vp-missing">Model attention unavailable</div>
-                    )}
-                    <span className="vp-caption">OD Model Attention (Grad-CAM)</span>
                   </div>
                 </div>
-              </div>
+              )}
             </div>
           </div>
 

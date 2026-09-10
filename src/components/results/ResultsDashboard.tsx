@@ -110,7 +110,6 @@ export const ResultsDashboard: React.FC = () => {
             <span className="ctx-val font-mono">{exam.modelVersion || 'DR-EfficientNetB0'}</span>
           </div>
         </div>
-
         <div className="export-report-btn-wrap" style={{ display: 'flex', gap: '8px' }}>
           <button
             type="button"
@@ -167,7 +166,52 @@ export const ResultsDashboard: React.FC = () => {
             <div className="banner-review-note"><ShieldCheck size={14} /> Ophthalmologist confirmation required before clinical decisions.</div>
           </section>
 
-          {/* Section 2: Bilateral Retinal Imaging with GradCAM & Enhanced Toggles */}
+          {/* Section 2: Retinal Evidence (Lesions) — shown first so clinician sees results instantly */}
+          <section className="dashboard-panel panel-evidence">
+            <div className="panel-sub-header">
+              <span className="panel-title-sm">RETINAL EVIDENCE</span>
+              <span className="panel-tag-sm">Lesion detection & biomarker findings</span>
+            </div>
+
+            <table className="compact-evidence-table">
+              <thead>
+                <tr>
+                  <th>FINDING / LESION TYPE</th>
+                  <th>LEFT EYE (OS)</th>
+                  <th>RIGHT EYE (OD)</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>Microaneurysms</td>
+                  <td>{leftEye.evidence?.microaneurysms ? `${leftEye.evidence.microaneurysms.count} (${(leftEye.evidence.microaneurysms.confidence * 100).toFixed(0)}%)` : 'None'}</td>
+                  <td>{rightEye.evidence?.microaneurysms ? `${rightEye.evidence.microaneurysms.count} (${(rightEye.evidence.microaneurysms.confidence * 100).toFixed(0)}%)` : 'None'}</td>
+                </tr>
+                <tr>
+                  <td>Hemorrhages</td>
+                  <td>{leftEye.evidence?.hemorrhages ? `${leftEye.evidence.hemorrhages.count} (${(leftEye.evidence.hemorrhages.confidence * 100).toFixed(0)}%)` : 'None'}</td>
+                  <td>{rightEye.evidence?.hemorrhages ? `${rightEye.evidence.hemorrhages.count} (${(rightEye.evidence.hemorrhages.confidence * 100).toFixed(0)}%)` : 'None'}</td>
+                </tr>
+                <tr>
+                  <td>Exudates</td>
+                  <td>{leftEye.evidence?.exudates ? `${leftEye.evidence.exudates.count} (${(leftEye.evidence.exudates.confidence * 100).toFixed(0)}%)` : 'None'}</td>
+                  <td>{rightEye.evidence?.exudates ? `${rightEye.evidence.exudates.count} (${(rightEye.evidence.exudates.confidence * 100).toFixed(0)}%)` : 'None'}</td>
+                </tr>
+                <tr>
+                  <td>Vessel Abnormalities</td>
+                  <td>{leftEye.evidence?.vesselAbnormalities || 'None'}</td>
+                  <td>{rightEye.evidence?.vesselAbnormalities || 'None'}</td>
+                </tr>
+                <tr>
+                  <td>Macular Involvement</td>
+                  <td>{leftEye.evidence?.macularInvolvement ? 'Yes' : 'No'}</td>
+                  <td>{rightEye.evidence?.macularInvolvement ? 'Yes' : 'No'}</td>
+                </tr>
+              </tbody>
+            </table>
+          </section>
+
+          {/* Section 3: Bilateral Retinal Imaging with GradCAM & Enhanced Toggles */}
           <section className="dashboard-panel panel-imaging">
             <div className="panel-sub-header">
               <span className="panel-title-sm">RETINAL IMAGING & AI EXPLAINABILITY</span>
@@ -257,7 +301,7 @@ export const ResultsDashboard: React.FC = () => {
             </div>
           </section>
 
-          {/* Section 3: DR Severity Probability (Compact Table) */}
+          {/* Section 4: DR Severity Probability (Compact Table) */}
           <section className="dashboard-panel panel-probability">
             <div className="panel-sub-header">
               <span className="panel-title-sm">DR SEVERITY PROBABILITY</span>
@@ -314,51 +358,6 @@ export const ResultsDashboard: React.FC = () => {
                 </div>
               ))}
             </div>
-          </section>
-
-          {/* Section 4: Retinal Evidence */}
-          <section className="dashboard-panel panel-evidence">
-            <div className="panel-sub-header">
-              <span className="panel-title-sm">RETINAL EVIDENCE</span>
-              <span className="panel-tag-sm">Evidence source: computer-vision heuristics · review required</span>
-            </div>
-
-            <table className="compact-evidence-table">
-              <thead>
-                <tr>
-                  <th>FINDING / LESION TYPE</th>
-                  <th>LEFT EYE (OS)</th>
-                  <th>RIGHT EYE (OD)</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr>
-                  <td>Microaneurysms</td>
-                  <td>{leftEye.evidence?.microaneurysms ? `${leftEye.evidence.microaneurysms.count} (${(leftEye.evidence.microaneurysms.confidence * 100).toFixed(0)}%)` : 'None'}</td>
-                  <td>{rightEye.evidence?.microaneurysms ? `${rightEye.evidence.microaneurysms.count} (${(rightEye.evidence.microaneurysms.confidence * 100).toFixed(0)}%)` : 'None'}</td>
-                </tr>
-                <tr>
-                  <td>Hemorrhages</td>
-                  <td>{leftEye.evidence?.hemorrhages ? `${leftEye.evidence.hemorrhages.count} (${(leftEye.evidence.hemorrhages.confidence * 100).toFixed(0)}%)` : 'None'}</td>
-                  <td>{rightEye.evidence?.hemorrhages ? `${rightEye.evidence.hemorrhages.count} (${(rightEye.evidence.hemorrhages.confidence * 100).toFixed(0)}%)` : 'None'}</td>
-                </tr>
-                <tr>
-                  <td>Exudates</td>
-                  <td>{leftEye.evidence?.exudates ? `${leftEye.evidence.exudates.count} (${(leftEye.evidence.exudates.confidence * 100).toFixed(0)}%)` : 'None'}</td>
-                  <td>{rightEye.evidence?.exudates ? `${rightEye.evidence.exudates.count} (${(rightEye.evidence.exudates.confidence * 100).toFixed(0)}%)` : 'None'}</td>
-                </tr>
-                <tr>
-                  <td>Vessel Abnormalities</td>
-                  <td>{leftEye.evidence?.vesselAbnormalities || 'None'}</td>
-                  <td>{rightEye.evidence?.vesselAbnormalities || 'None'}</td>
-                </tr>
-                <tr>
-                  <td>Macular Involvement</td>
-                  <td>{leftEye.evidence?.macularInvolvement ? 'Yes' : 'No'}</td>
-                  <td>{rightEye.evidence?.macularInvolvement ? 'Yes' : 'No'}</td>
-                </tr>
-              </tbody>
-            </table>
           </section>
         </div>
 

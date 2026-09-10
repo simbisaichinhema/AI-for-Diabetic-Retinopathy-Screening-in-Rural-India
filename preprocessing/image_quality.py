@@ -117,44 +117,79 @@ def compute_fundus_score(image: np.ndarray) -> float:
     """Check if image has fundus color characteristics with continuous scoring.
 
     Fundus images are dominated by reds/oranges/pinks from retinal tissue.
+    Non-fundus images (faces, text, landscapes, noise) should score near 0.
     Returns score in [0, 1] range.
     """
     if len(image.shape) != 3:
-        return 0.5  # Grayscale fallback
+        return 0.0
 
     img = image.astype(np.float32)
     r, g, b = img[:, :, 0], img[:, :, 1], img[:, :, 2]
 
-    # Uniform or nearly black frames are not fundus photographs, regardless
-    # of channel ratios that can look superficially retinal.
+    # Reject near-uniform, very dark, or very bright images
     gray = cv2.cvtColor(image, cv2.COLOR_RGB2GRAY)
-    if float(np.mean(gray)) < 20 or float(np.std(gray)) < 5:
+    mean_val = float(np.mean(gray))
+    std_val = float(np.std(gray))
+    if mean_val < 25 or std_val < 8:
+        return 0.0
+
+    # Fundus images have moderate brightness (40-180), very bright = not fundus
+    if mean_val > 200:
         return 0.0
 
     mean_r = float(np.mean(r))
     mean_g = float(np.mean(g))
     mean_b = float(np.mean(b))
 
-    # Red prominence
+    # 1. Red dominance — fundus is heavily red
     r_prominence = (mean_r + 1.0) / (mean_g + mean_b + 2.0)
-    score_red = min(1.0, max(0.1, (r_prominence - 0.2) / 0.8))
+    score_red = min(1.0, max(0.0, (r_prominence - 0.35) / 0.65))
 
-    # Red/Green ratio (fundus typical 1.1 - 2.5)
+    # 2. Red/Green ratio (fundus typical 1.2 - 2.2)
     rg_ratio = (mean_r + 1.0) / (mean_g + 1.0)
-    score_rg = 1.0 if 1.0 <= rg_ratio <= 3.0 else max(0.3, 1.0 - abs(rg_ratio - 1.5) / 2.5)
+    score_rg = 1.0 if 1.2 <= rg_ratio <= 2.2 else max(0.0, 1.0 - abs(rg_ratio - 1.7) / 2.0)
 
-    # Blue suppression (retina absorbs blue)
+    # 3. Blue suppression (retina absorbs blue light)
     blue_ratio = (mean_b + 1.0) / (mean_r + 1.0)
-    score_blue = max(0.2, min(1.0, (1.3 - blue_ratio) / 0.8))
+    score_blue = max(0.0, min(1.0, (1.1 - blue_ratio) / 0.7))
 
-    # HSV hue distribution
+    # 4. HSV hue concentration in red-orange range
     hsv = cv2.cvtColor(image, cv2.COLOR_RGB2HSV)
     hue = hsv[:, :, 0]
-    red_hue_mask = ((hue >= 0) & (hue <= 35)) | (hue >= 165)
+    sat = hsv[:, :, 1]
+    red_hue_mask = ((hue >= 0) & (hue <= 35)) & (sat > 40)
     red_hue_ratio = float(np.mean(red_hue_mask))
 
-    # Weighted combined fundus likelihood score
-    score = 0.35 * score_red + 0.25 * score_rg + 0.20 * score_blue + 0.20 * red_hue_ratio
+    # 5. Dark border presence — fundus images have dark circular border
+    _, binary = cv2.threshold(gray, 30, 255, cv2.THRESH_BINARY)
+    dark_pixels = float(np.mean(binary == 0))
+    score_border = 1.0 if 0.08 < dark_pixels < 0.45 else max(0.0, 1.0 - abs(dark_pixels - 0.2) / 0.3)
+
+    # 6. Natural image check — real images have smooth gradients (low high-freq noise)
+    lap = cv2.Laplacian(gray, cv2.CV_64F)
+    lap_var = float(np.var(lap))
+    score_natural = 1.0 if lap_var < 1500 else max(0.0, 1.0 - (lap_var - 1500) / 3000)
+
+    # 7. Color channel consistency — real images have correlated channels, noise does not
+    # Correlation between R and G channels (real images: >0.7, noise: ~0)
+    r_flat = r.flatten()
+    g_flat = g.flatten()
+    if np.std(r_flat) > 0 and np.std(g_flat) > 0:
+        corr_rg = float(np.corrcoef(r_flat, g_flat)[0, 1])
+    else:
+        corr_rg = 0.0
+    score_corr = max(0.0, min(1.0, (corr_rg + 0.2) / 0.8))  # Maps 0.6->1.0, 0->0.25
+
+    # Weighted combination
+    score = (
+        0.20 * score_red
+        + 0.15 * score_rg
+        + 0.10 * score_blue
+        + 0.15 * red_hue_ratio
+        + 0.10 * score_border
+        + 0.10 * score_natural
+        + 0.20 * score_corr
+    )
     return float(np.clip(score, 0.0, 1.0))
 
 
@@ -164,7 +199,7 @@ def assess_image_quality(
     min_illumination: float = 0.25,
     min_fov: float = 0.30,
     min_overall: float = 0.35,
-    min_fundus: float = 0.30,
+    min_fundus: float = 0.35,
 ) -> QualityResult:
     """Assess overall image quality for DR screening."""
     focus = compute_focus_score(image)

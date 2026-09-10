@@ -22,7 +22,7 @@ class QualityGate:
         min_illumination: float = 0.4,
         min_fov: float = 0.5,
         min_overall: float = 0.5,
-        min_fundus: float = 0.3,
+        min_fundus: float = 0.35,
     ):
         self.min_focus = min_focus
         self.min_illumination = min_illumination

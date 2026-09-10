@@ -68,7 +68,6 @@ export const QualityProcessingPage: React.FC = () => {
               Evaluating bilateral retinal vascular sharpness, luminance & anatomical coverage.
             </p>
           </div>
-
           <div className="qp-header-right">
             <div className="qp-patient-chip">
               <span className="p-chip-label">PATIENT</span>

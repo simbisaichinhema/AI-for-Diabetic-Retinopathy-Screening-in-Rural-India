@@ -184,7 +184,6 @@ export const SessionStartPage: React.FC = () => {
 
             {/* Right Column: Title & Action CTA */}
             <div className="ss-hero-text-block">
-              <img src="/assets/sih_logo_bar.jpg" alt="Smart India Hackathon" className="ss-hero-brand-logo" />
               <div className="ss-hero-label">
                 <span className="ss-pulse-dot" />
                 AI-Powered Retinal Screening · NHM India
