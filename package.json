@@ -5,6 +5,8 @@
   "type": "module",
   "scripts": {
     "start": "node start.js",
+    "start:win": "powershell -ExecutionPolicy Bypass -File start.ps1",
+    "start:linux": "bash ./start.sh",
     "dev": "vite",
     "build": "tsc && vite build",
     "preview": "vite preview"
