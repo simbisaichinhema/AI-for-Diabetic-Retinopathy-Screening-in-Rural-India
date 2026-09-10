@@ -54,7 +54,7 @@ automated AI triage with explainable evidence, so referable cases reach a specia
 | Backend | FastAPI, Uvicorn, Server-Sent Events |
 | Deep learning | PyTorch, Keras 3, EfficientNet-B0 + CORAL ordinal regression |
 | Vision | OpenCV, Pillow |
-| Deploy |.venv|
+| Deploy |Render + vercel |
 
 ---
 
