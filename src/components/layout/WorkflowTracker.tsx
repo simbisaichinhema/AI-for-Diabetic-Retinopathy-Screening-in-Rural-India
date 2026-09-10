@@ -7,6 +7,7 @@
 import React from 'react';
 import { Eye } from 'lucide-react';
 import { useScreening } from '../../context/ScreeningContext';
+import { ScreeningStep } from '../../types/clinical';
 
 const STEP_LABELS: Record<string, string> = {
   acquisition:          '① Acquisition',
@@ -16,9 +17,18 @@ const STEP_LABELS: Record<string, string> = {
   clinical_results:     '⑤ Clinical Results',
 };
 
+const STEP_ORDER: ScreeningStep[] = [
+  'acquisition',
+  'quality_processing',
+  'quality_results',
+  'analysis_processing',
+  'clinical_results',
+];
+
 export const WorkflowTracker: React.FC = () => {
   const { exam, currentStep, navigateToStep } = useScreening();
   const stepKeys = Object.keys(STEP_LABELS);
+  const currentIdx = STEP_ORDER.indexOf(currentStep);
 
   return (
     <header className="wt-header">
@@ -33,17 +43,24 @@ export const WorkflowTracker: React.FC = () => {
         </div>
       </div>
 
-      {/* Center: Step tabs */}
+      {/* Center: Step tabs — locked to prevent skipping ahead */}
       <nav className="wt-steps" aria-label="Workflow steps">
         {stepKeys.map((key) => {
+          const idx = STEP_ORDER.indexOf(key as ScreeningStep);
           const isActive = currentStep === key;
-          const isDone   = stepKeys.indexOf(key) < stepKeys.indexOf(currentStep);
+          const isDone = idx < currentIdx;
+          const isLocked = idx > currentIdx;
+
           return (
             <button
               key={key}
               type="button"
-              className={`wt-step ${isActive ? 'wt-step--active' : ''} ${isDone ? 'wt-step--done' : ''}`}
-              onClick={() => navigateToStep(key as Parameters<typeof navigateToStep>[0])}
+              className={`wt-step ${isActive ? 'wt-step--active' : ''} ${isDone ? 'wt-step--done' : ''} ${isLocked ? 'wt-step--locked' : ''}`}
+              onClick={() => {
+                if (!isLocked) navigateToStep(key as ScreeningStep);
+              }}
+              disabled={isLocked}
+              title={isLocked ? 'Complete current step first' : STEP_LABELS[key]}
             >
               {STEP_LABELS[key]}
             </button>

@@ -158,10 +158,6 @@ export const ScreeningProvider: React.FC<{ children: ReactNode }> = ({ children 
     setQualityProgress(5);
     setQualityStageMessage('Left Eye (OS): Initializing optical sharpness & focus scan...');
 
-    console.log('[QA] LEFT imageSrc length:', exam.leftEye.imageSrc?.length, 'side:', exam.leftEye.side);
-    console.log('[QA] RIGHT imageSrc length:', exam.rightEye.imageSrc?.length, 'side:', exam.rightEye.side);
-    console.log('[QA] LEFT imageSrc === RIGHT imageSrc:', exam.leftEye.imageSrc === exam.rightEye.imageSrc);
-
     const duplicateCapture = exam.leftEye.imageSrc === exam.rightEye.imageSrc;
     if (duplicateCapture) {
       const duplicateReason = 'The same image was selected for both eyes. Capture separate OS and OD fundus images.';
@@ -196,9 +192,7 @@ export const ScreeningProvider: React.FC<{ children: ReactNode }> = ({ children 
     if (exam.leftEye.imageSrc) {
       setQualityProgress(20);
       setQualityStageMessage('Left Eye (OS): Assessing focus, illumination, field of view and fundus validity...');
-      console.log('[QA] Calling assessQuality for LEFT eye, side:', exam.leftEye.side);
       const result = await withTimeout(apiService.assessQuality(exam.leftEye), 30000);
-      console.log('[QA] LEFT result:', result?.overallStatus, result?.fundusValidity?.isValid);
       if (result) leftMetrics = result;
     }
 
@@ -206,9 +200,7 @@ export const ScreeningProvider: React.FC<{ children: ReactNode }> = ({ children 
     if (exam.rightEye.imageSrc) {
       setQualityProgress(60);
       setQualityStageMessage('Right Eye (OD): Assessing focus, illumination, field of view and fundus validity...');
-      console.log('[QA] Calling assessQuality for RIGHT eye, side:', exam.rightEye.side);
       const result = await withTimeout(apiService.assessQuality(exam.rightEye), 30000);
-      console.log('[QA] RIGHT result:', result?.overallStatus, result?.fundusValidity?.isValid);
       if (result) rightMetrics = result;
     }
 

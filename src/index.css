@@ -5260,6 +5260,15 @@ html, body {
 .wt-step--done {
   color: #2563eb;
 }
+.wt-step--locked {
+  color: #cbd5e1;
+  cursor: not-allowed;
+  opacity: 0.5;
+}
+.wt-step--locked:hover {
+  color: #cbd5e1;
+  background: none;
+}
 
 /* Right: patient chip + status */
 .wt-right {
