@@ -1,47 +1,25 @@
----
-title: INFINITE LOOPS - SIH26038 Retinal Screening
-emoji: 👁️
-colorFrom: blue
-colorTo: blue
-sdk: docker
-app_port: 7860
-pinned: false
----
+
 
 <div align="center">
 
-# 👁️ INFINITE LOOPS — SIH26038
+# INFINITE LOOPS — SIH26038
 ### Explainable AI for Diabetic Retinopathy Screening in Rural India
 
 **Smart India Hackathon 2026 · Problem Statement SIH26038 · Team INFINITE LOOPS**
 
 </div>
 
----
+## 🌍 Problem ContextS
 
-## ⚕️ Clinical Safety Notice
+India has over 77 million diabetic adults - the second highest globally. Diabetic Retinopathy (DR) affects ~18% of this population and is a leading cause of preventable blindness. Early screening can prevent90% of vision loss, but India has only ~1 ophthalmologist per 100,000 rural population, making mass manual screening infeasible. Existing AI solutions function as black boxes, lack clinical validation rigor, and fail with variable image quality from portable fundus cameras in field conditions. A robust, explainable, and validated screening system is essential for deployment in primary healthcare centres across rural India.
 
-> **INVESTIGATIONAL USE — CLINICAL DECISION SUPPORT ONLY.**
-> This software is an AI-assisted screening triage prototype for healthcare workers and
-> optometrists. **It does not provide a definitive medical diagnosis.** Every automated
-> assessment must be reviewed and confirmed by a certified ophthalmologist before any
-> clinical decision is made.
-
----
-
-## 🌍 Problem Context
-
-India has over **101 million diagnosed diabetics** plus **136 million pre-diabetics**.
-Up to 30% develop **Diabetic Retinopathy (DR)** — a leading cause of preventable blindness —
-while **over 85% of ophthalmologists** practice in urban centres. Rural populations are left
-without screening access.
 
 This system lets **ASHA workers and PHC staff** capture fundus photographs and receive
 automated AI triage with explainable evidence, so referable cases reach a specialist in time.
 
 ---
 
-## ✨ Key Features
+##  Key Features
 
 - **Bilateral screening** — simultaneous Right Eye (OD) and Left Eye (OS) evaluation.
 - **Real-time quality gate** — rejects ungradable images (blur, poor illumination, small
@@ -55,7 +33,7 @@ automated AI triage with explainable evidence, so referable cases reach a specia
 
 ---
 
-## 🏗️ Architecture
+##  Architecture
 
 ```
  fundus photo
@@ -76,11 +54,11 @@ automated AI triage with explainable evidence, so referable cases reach a specia
 | Backend | FastAPI, Uvicorn, Server-Sent Events |
 | Deep learning | PyTorch, Keras 3, EfficientNet-B0 + CORAL ordinal regression |
 | Vision | OpenCV, Pillow |
-| Deploy (review) | Docker / Docker Compose on port 7860 |
+| Deploy |.venv|
 
 ---
 
-## 🚀 How to Run It
+##  How to Run It
 
 ### Prerequisites
 
@@ -133,7 +111,7 @@ Open http://localhost:7860. The same workstation is served by the backend contai
 
 ---
 
-## 🧭 How to Take a Screening (operator walkthrough)
+##  How to Take a Screening (operator walkthrough)
 
 1. Open the workstation and start a new session.
 2. Capture or upload the **Right Eye (OD)** fundus photo, then the **Left Eye (OS)**.
@@ -146,7 +124,7 @@ Open http://localhost:7860. The same workstation is served by the backend contai
 
 ---
 
-## 📊 Datasets — Where Every Image Comes From
+##  Datasets — Where Every Image Comes From
 
 No dataset is bundled with this repo (they are too large and carry their own licences).
 Each one is fetched from its original public source and lands under `data/`.
@@ -172,7 +150,7 @@ python scripts/download_datasets.py --dataset all
 
 ---
 
-## 🏋️ How to Train the Models
+## How to Train the Models
 
 Training configs live in `configs/config.yaml`. Outputs go to `models/` (git-ignored).
 
@@ -233,7 +211,7 @@ confidence, referable probability and quality-gate verdict, and asserts the outp
 
 ---
 
-## 📡 API Reference
+##  API Reference
 
 | Method | Path | Description |
 |---|---|---|
@@ -260,7 +238,7 @@ Successful responses carry `status: "completed"` with `quality`, `dr_prediction`
 
 ---
 
-## 🧪 Testing
+##  Testing
 
 ```bash
 # Backend suite (quality gate, preprocessing, classifier, pipeline)
@@ -272,7 +250,7 @@ npm run build
 
 ---
 
-## 📁 Project Structure
+##  Project Structure
 
 ```
 src/               React workstation (components, services, types)
@@ -289,7 +267,7 @@ public/assets/     sample fundus images for walkthroughs
 
 ---
 
-## ☁️ Note on Model Weights (fallback)
+##  Note on Model Weights (fallback)
 
 The weights used at review time are downloaded once from a public model repository and
 cached locally — this is a convenience fallback so reviewers never need large files.
@@ -298,7 +276,7 @@ The authoritative path is training from source with the scripts above; any compa
 
 ---
 
-## 👥 Team
+##  Team
 
 - **Event:** Smart India Hackathon 2026
 - **Problem Statement:** SIH26038 — AI for Diabetic Retinopathy Screening in Rural India
